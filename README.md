@@ -82,4 +82,4 @@ Set the base branch to dev and the compare branch to feature-your-task-name (dev
 
 Add a short title and description of your changes, then click Create pull request.
 
-Notify the project leader to review and merge your Pull Request into dev.
+Notify the project leader to review and merge your Pull Request into dev..
