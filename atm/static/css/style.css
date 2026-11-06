@@ -12,6 +12,15 @@
     box-sizing: border-box;
 }
 
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
 .pin-entry {
     background: linear-gradient(135deg, #f6e4e5 0%, #eaeef4 20%, #eaeef4 65%, #f2e7de 100%);
     background-repeat: no-repeat;
@@ -41,14 +50,6 @@
     justify-content: center;
     gap: 2.5rem;
 }
-
-@media (min-width: 900px) {
-    .page {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
-} 
 
 .logo img {
     display: block;
@@ -192,6 +193,7 @@
 .lock-icon:focus-visible          { outline: 2px solid var(--amber); outline-offset: 3px; }
 
 .pin-field {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -202,9 +204,19 @@
     border-radius: 18px;
 }
 
+.pin-field:focus-within { border-color: var(--amber); background: #fff; }
 .pin-field.is-active { border-color: var(--amber); background: #fff; }
 .pin-field.is-error  { border-color: var(--red);   background: #fff; }
 .pin-field.is-locked { border-color: var(--red-soft); background: #f7f9fc; }
+
+.pin-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: text;
+}
 
 .pin-lock {
     width: 20px;
@@ -225,6 +237,19 @@
     background: #c3cddc;
 }
 .dot.filled { background: var(--navy); }
+
+.dot.current { position: relative; }
+.dot.current::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: -8px;
+    width: 1px;
+    height: 24px;
+    background: var(--navy);
+    animation: blink 1s steps(1) infinite;
+}
+.pin-field:not(:focus-within) .dot.current::before { display: none; }
 
 .pin-count {
     font-size: 0.75rem;

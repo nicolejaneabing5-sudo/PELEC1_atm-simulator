@@ -73,6 +73,9 @@
                     <span class="dot"></span>
                     <span class="dot"></span>
                 </div>
+
+                <input type="password" id="pin-input" class="pin-input" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="4-digit PIN">
+                
                 <span class="pin-count" id="pin-count">0/4</span>
             </div>
 
@@ -134,6 +137,6 @@
         </nav>
     </footer>
 
-    <!-- <script src="{% static 'js/script.js' %}" defer></script> -->
+    <script src="{% static 'js/pin.js' %}" defer></script> 
 </body>
 </html>
