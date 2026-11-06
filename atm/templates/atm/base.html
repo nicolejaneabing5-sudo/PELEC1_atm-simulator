@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC ATM Simulator</title>
+    <!-- Google Fonts for clean typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background-color: #f4f6f9;
+            color: #0f172a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Shared Header Style matching your Figma */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .mastercard-circles {
+            display: flex;
+        }
+        .circle-red {
+            width: 28px;
+            height: 28px;
+            background: #eb001b;
+            border-radius: 50%;
+        }
+        .circle-orange {
+            width: 28px;
+            height: 28px;
+            background: #f79e1b;
+            border-radius: 50%;
+            margin-left: -12px;
+            opacity: 0.85;
+        }
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: 0.5px;
+        }
+        main {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Shared Header appearing on all screens -->
+    <header>
+        <div class="logo-container">
+            <div class="mastercard-circles">
+                <div class="circle-red"></div>
+                <div class="circle-orange"></div>
+            </div>
+            <span class="logo-text">ABC</span>
+        </div>
+        
+        <div>
+            {% block header_right %}
+            <!-- Teammates can put profile info or notifications here if needed -->
+            {% endblock %}
+        </div>
+    </header>
+
+    <!-- Main Content Area where individual pages (login, dashboard, withdraw) inject their design -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+  <footer style="padding: 1.5rem 0; display: flex; flex-wrap: nowrap; justify-content: center; align-items: center; gap: 1.8rem; font-size: 0.8rem; color: #64748b; background: transparent; width: 100%;">
+        <span style="color: #94a3b8; white-space: nowrap;">© 2026 ABC</span>
+        <a href="#" class="footer-link" style="color: #64748b; text-decoration: none !important;">Terms</a>
+        <a href="#" class="footer-link" style="color: #64748b; text-decoration: none !important;">Privacy</a>
+        <a href="#" class="footer-link" style="color: #64748b; text-decoration: none !important;">Security</a>
+        <a href="#" class="footer-link" style="color: #64748b; text-decoration: none !important;">Status</a>
+        <a href="#" class="footer-link" style="color: #64748b; text-decoration: none !important;">Docs</a>
+        <a href="#" class="footer-link" style="color: #64748b; text-decoration: none !important;">Contact</a>
+    </footer>
+
+    <style>
+        .footer-link {
+            color: #64748b;
+            text-decoration: none !important;
+            transition: color 0.15s ease;
+        }
+
+        .footer-link:hover {
+            color: #0f172a;
+            text-decoration: none !important;
+        }
+    </style>
+
+</body>
+</html>

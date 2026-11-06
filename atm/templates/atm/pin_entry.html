@@ -1,0 +1,145 @@
+{% extends 'atm/base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; min-height: calc(100vh - 80px); padding: 2rem 5rem; background: linear-gradient(135deg, #f1f4f9 0%, #e2e8f0 100%);">
+    
+    <!-- Left Side: Hero Branding & Copy -->
+    <div style="flex: 1; padding-right: 3rem;">
+        <!-- Logo -->
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 2.5rem;">
+            <div style="display: flex;">
+                <div style="width: 32px; height: 32px; background: #eb001b; border-radius: 50%;"></div>
+                <div style="width: 32px; height: 32px; background: #f79e1b; border-radius: 50%; margin-left: -14px; opacity: 0.85;"></div>
+            </div>
+            <span style="font-size: 1.6rem; font-weight: 700; color: #0f172a; letter-spacing: 0.5px;">ABC</span>
+        </div>
+
+        <p style="color: #dc2626; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1.5px; margin-bottom: 0.75rem;">ABC Secure Access</p>
+        <h1 style="font-size: 3.5rem; color: #0f172a; line-height: 1.15; font-weight: 800; margin-bottom: 1.5rem;">Your money,<br>right at your fingertips.</h1>
+        <p style="color: #64748b; font-size: 1.1rem; line-height: 1.5; max-width: 450px; margin-bottom: 3rem;">Access your accounts, manage deposits, and make withdrawals in one secure place.</p>
+
+        <!-- Trust Badges -->
+        <div style="display: flex; gap: 2.5rem;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="background: white; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); color: #dc2626; font-size: 1.2rem;">🛡️</div>
+                <div>
+                    <h4 style="margin: 0; font-size: 0.95rem; color: #0f172a; font-weight: 600;">Secure access</h4>
+                    <span style="font-size: 0.8rem; color: #64748b;">Protected session</span>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="background: white; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); color: #ca8a04; font-size: 1.2rem;">⏱️</div>
+                <div>
+                    <h4 style="margin: 0; font-size: 0.95rem; color: #0f172a; font-weight: 600;">Always available</h4>
+                    <span style="font-size: 0.8rem; color: #64748b;">Bank anytime</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side: PIN Entry Interactive Card -->
+    <div style="background: white; padding: 3.5rem; border-radius: 24px; box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.08); width: 540px; border: 1px solid rgba(226, 232, 240, 0.8);">
+        
+        <!-- Card Header -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+            <div>
+                <span style="color: #dc2626; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Welcome Back</span>
+                <h2 style="margin: 0; color: #0f172a; font-size: 1.8rem; font-weight: 700;">Enter your PIN</h2>
+            </div>
+            <div style="background: #0f172a; color: white; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">🔒</div>
+        </div>
+        
+        <p style="color: #64748b; font-size: 0.88rem; margin-bottom: 1.5rem;">Use the keypad or your keyboard to enter your 4-digit PIN.</p>
+        
+        <!-- PIN Input Display Box -->
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1.1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="color: #94a3b8; font-size: 1.1rem;">🔒</span>
+                <div id="pin-dots" style="display: flex; gap: 10px; align-items: center;">
+                    <div class="pin-dot" style="width: 10px; height: 10px; border-radius: 50%; background: #cbd5e1; transition: all 0.2s;"></div>
+                    <div class="pin-dot" style="width: 10px; height: 10px; border-radius: 50%; background: #cbd5e1; transition: all 0.2s;"></div>
+                    <div class="pin-dot" style="width: 10px; height: 10px; border-radius: 50%; background: #cbd5e1; transition: all 0.2s;"></div>
+                    <div class="pin-dot" style="width: 10px; height: 10px; border-radius: 50%; background: #cbd5e1; transition: all 0.2s;"></div>
+                </div>
+            </div>
+            <span id="pin-counter" style="color: #64748b; font-size: 0.85rem; font-weight: 500;">0/4</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #64748b; margin-bottom: 1.5rem; padding: 0 4px;">
+            <span>Simulator PIN: <strong style="color: #0f172a;">1234</strong></span>
+            <span>4 attempts left</span>
+        </div>
+
+        <!-- Keypad Grid -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem;">
+            <button type="button" class="keypad-btn" data-val="1" style="background: white; border: 1.5px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1.15rem; color: #0f172a; cursor: pointer;">1</button>
+            <button type="button" class="keypad-btn" data-val="2" style="background: white; border: 1.5px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1.15rem; color: #0f172a; cursor: pointer;">2</button>
+            <button type="button" class="keypad-btn" data-val="3" style="background: white; border: 1.5px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1.15rem; color: #0f172a; cursor: pointer;">3</button>
+            <button type="button" class="keypad-btn" data-val="4" style="background: white; border: 1.5px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1.15rem; color: #0f172a; cursor: pointer;">4</button>
+            <button type="button" class="keypad-btn" data-val="5" style="background: white; border: 1.5px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1.15rem; color: #0f172a; cursor: pointer;">5</button>
+            <button type="button" class="keypad-btn" data-val="6" style="background: white; border: 1.5px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1.15rem; color: #0f172a; cursor: pointer;">6</button>
+            <button type="button" class="keypad-btn" data-val="7" style="background: white; border: 1.5px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1.15rem; color: #0f172a; cursor: pointer;">7</button>
+            <button type="button" class="keypad-btn" data-val="8" style="background: white; border: 1.5px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1.15rem; color: #0f172a; cursor: pointer;">8</button>
+            <button type="button" class="keypad-btn" data-val="9" style="background: white; border: 1.5px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1.15rem; color: #0f172a; cursor: pointer;">9</button>
+            <button type="button" id="clear-btn" style="background: transparent; border: none; font-weight: 700; font-size: 0.8rem; color: #64748b; cursor: pointer; letter-spacing: 0.5px;">CLEAR</button>
+            <button type="button" class="keypad-btn" data-val="0" style="background: white; border: 1.5px solid #e2e8f0; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1.15rem; color: #0f172a; cursor: pointer;">0</button>
+            <button type="button" id="backspace-btn" style="background: transparent; border: none; font-size: 1.2rem; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center;">⌫</button>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="button" id="submit-pin" style="width: 100%; background: #0f172a; color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.2);">
+            Access my accounts <span style="font-size: 1.1rem;">→</span>
+        </button>
+
+        <p style="text-align: center; color: #94a3b8; font-size: 0.72rem; line-height: 1.4; margin-top: 1.25rem;">PELEC ATM SIMULATOR<br>Never share your real banking PIN.</p>
+    </div>
+</div>
+
+<!-- Interactive Keypad Script -->
+<script>
+    let currentPin = "";
+    const maxPinLength = 4;
+    const dots = document.querySelectorAll('.pin-dot');
+    const counter = document.getElementById('pin-counter');
+
+    function updateDisplay() {
+        dots.forEach((dot, index) => {
+            if (index < currentPin.length) {
+                dot.style.background = "#0f172a";
+                dot.style.transform = "scale(1.2)";
+            } else {
+                dot.style.background = "#cbd5e1";
+                dot.style.transform = "scale(1)";
+            }
+        });
+        counter.textContent = `${currentPin.length}/${maxPinLength}`;
+    }
+
+    document.querySelectorAll('.keypad-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            if (currentPin.length < maxPinLength) {
+                currentPin += button.getAttribute('data-val');
+                updateDisplay();
+            }
+        });
+    });
+
+    document.getElementById('clear-btn').addEventListener('click', () => {
+        currentPin = "";
+        updateDisplay();
+    });
+
+    document.getElementById('backspace-btn').addEventListener('click', () => {
+        currentPin = currentPin.slice(0, -1);
+        updateDisplay();
+    });
+
+    document.getElementById('submit-pin').addEventListener('click', () => {
+        if (currentPin.length === 4) {
+            window.location.href = "/dashboard/";
+        } else {
+            alert("Please enter your complete 4-digit PIN.");
+        }
+    });
+</script>
+{% endblock %}
