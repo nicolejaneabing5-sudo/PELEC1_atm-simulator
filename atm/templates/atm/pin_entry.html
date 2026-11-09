@@ -123,20 +123,8 @@
         </form>
     </main>
 
-    <footer class="site-footer">
-        <nav aria-label="Footer">
-            <ul>
-                <li><small>&copy; 2026 ABC</small></li>
-                <li><a href="#">Terms</a></li>
-                <li><a href="#">Privacy</a></li>
-                <li><a href="#">Security</a></li>
-                <li><a href="#">Status</a></li>
-                <li><a href="#">Docs</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
-    </footer>
-
+    {% include 'atm/footer.html' %}
+    <script src="{% static 'js/legal.js' %}" defer></script>
     <script src="{% static 'js/pin.js' %}" defer></script> 
 </body>
 </html>

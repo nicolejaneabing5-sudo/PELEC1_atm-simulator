@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard_style.css' %}">
+</head>
+<body class="dashboard">
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/dashboard/" class="logo">
+                <img src="{% static 'images/bank_logo.png' %}" alt="ABC Bank Logo">
+            </a>
+
+            <div class="header-actions">
+                <button type="button" class="bell-btn" aria-label="Notifications">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                    </svg>
+                </button>
+
+                <!-- goes back to the PIN page -->
+                <a href="/" class="user-menu">
+                    <span class="avatar" aria-hidden="true">JD</span>
+                    <span class="user-info">
+                        <strong>Jordan Davis</strong>
+                        <small>Lock session</small>
+                    </span>
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container dashboard-main">
+
+        <section class="greeting">
+            <div>
+                <p class="eyebrow eyebrow--orange">ATM Simulator</p>
+                <h1 id="greeting-title">Good morning, Jordan</h1>
+                <p class="greeting-sub">Choose an account to begin a transaction.</p>
+            </div>
+
+            <div class="total">
+                <small>Total balance</small>
+                <p>
+                    <strong id="total-balance">$21,100.72</strong>
+                    <a href="#" class="round-link" aria-label="View balance details">
+                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </a>
+                </p>
+            </div>
+        </section>
+
+        <fieldset class="accounts">
+            <legend class="visually-hidden">Choose an account</legend>
+
+            <label class="account-card">
+                <input type="radio" name="account" value="checking" class="visually-hidden" checked>
+                <span class="radio-mark" aria-hidden="true"></span>
+
+                <span class="account-head">
+                    <span class="icon-tile icon-tile--red" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+                        </svg>
+                    </span>
+                    <span>
+                        <strong>Checking Account</strong>
+                        <small>•••• 4821</small>
+                    </span>
+                </span>
+
+                <span class="balance-label">Available balance</span>
+                <span class="balance" data-balance="checking">$8,240.50</span>
+
+                <span class="limit">
+                    <span>Withdrawn today</span>
+                    <span><b data-withdrawn="checking">$0.00</b> / $50,000</span>
+                </span>
+                <span class="meter"><span data-meter="checking" style="width: 0%"></span></span>
+            </label>
+
+            <label class="account-card">
+                <input type="radio" name="account" value="savings" class="visually-hidden">
+                <span class="radio-mark" aria-hidden="true"></span>
+
+                <span class="account-head">
+                    <span class="icon-tile icon-tile--amber" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
+                        </svg>
+                    </span>
+                    <span>
+                        <strong>Savings Account</strong>
+                        <small>•••• 9017</small>
+                    </span>
+                </span>
+
+                <span class="balance-label">Available balance</span>
+                <span class="balance" data-balance="savings">$12,860.22</span>
+
+                <span class="limit">
+                    <span>Withdrawn today</span>
+                    <span><b data-withdrawn="savings">$0.00</b> / $50,000</span>
+                </span>
+                <span class="meter"><span data-meter="savings" style="width: 0%"></span></span>
+            </label>
+        </fieldset>
+
+        <div class="dashboard-grid">
+
+            <section class="panel transactions" aria-labelledby="tx-title">
+                <header class="panel-head">
+                    <div>
+                        <h2 id="tx-title">Transactions</h2>
+                        <p>Checking and savings accounts</p>
+                    </div>
+                    <a href="#" class="view-all">View all ›</a>
+                </header>
+
+                <!-- rows are drawn by dashboard.js -->
+                <ul class="tx-list" id="tx-list"></ul>
+            </section>
+
+            <section class="new-tx" aria-labelledby="new-tx-title">
+                <div class="new-tx-head">
+                    <div>
+                        <p class="eyebrow eyebrow--light">New transaction</p>
+                        <h2 id="new-tx-title">Checking Account</h2>
+                    </div>
+                    <span class="chip">•••• 4821</span>
+                </div>
+
+                <div class="segmented" role="radiogroup" aria-label="Transaction type">
+                    <label>
+                        <input type="radio" name="tx-type" value="deposit" class="visually-hidden" checked>
+                        <span>Deposit</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="tx-type" value="withdrawal" class="visually-hidden">
+                        <span>Withdrawal</span>
+                    </label>
+                </div>
+
+                <form id="tx-form" novalidate>
+                    <label for="amount" class="field-label">Amount</label>
+
+                    <div class="amount-field">
+                        <span class="currency-sign" aria-hidden="true">$</span>
+                        <input type="text" id="amount" inputmode="decimal" placeholder="0.00" autocomplete="off">
+                        <span class="currency-code">USD</span>
+                    </div>
+
+                    <p class="tx-message" id="tx-message" role="alert" hidden></p>
+
+                    <div class="quick-amounts" role="group" aria-label="Quick amounts">
+                        <button type="button" data-amount="50">$50</button>
+                        <button type="button" data-amount="100">$100</button>
+                        <button type="button" data-amount="200">$200</button>
+                    </div>
+
+                    <button type="submit" class="btn-amber">
+                        <span id="tx-submit-label">Deposit funds</span>
+                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+                </form>
+
+                <div class="limits-note">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                    </svg>
+                    <div>
+                        <p><strong>Withdrawal limits: $25,000 per transaction • $50,000 daily</strong></p>
+                        <p id="limits-today">Withdrawn today: $0.00 • $50,000.00 remaining</p>
+                        <p id="overdraft-note">Checking includes up to $500 of overdraft protection.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    {% include 'atm/footer.html' %}
+    <script src="{% static 'js/legal.js' %}" defer></script>
+    <script src="{% static 'js/dashboard.js' %}" defer></script>
+</body>
+</html>

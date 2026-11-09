@@ -8,6 +8,7 @@ let locked = false;
 
 const form        = document.getElementById("pin-form");
 const field       = document.getElementById("pin-field");
+const input       = document.getElementById("pin-input");
 const dots        = document.querySelectorAll(".dot");
 const count       = document.getElementById("pin-count");
 const errorEl     = document.getElementById("pin-error");
@@ -24,8 +25,12 @@ const DEFAULT_DESC = cardDesc.textContent;
 
 /* ---------- display ---------- */
 function render() {
-    dots.forEach((dot, i) => dot.classList.toggle("filled", i < pin.length));
+    dots.forEach((dot, i) => {
+        dot.classList.toggle("filled", i < pin.length);
+        dot.classList.toggle("current", i === pin.length && !locked);
+    });
     count.textContent = `${pin.length}/${PIN_LENGTH}`;
+    input.value = pin;
     field.classList.toggle("is-active", pin.length > 0 && !locked);
 }
 
@@ -53,6 +58,7 @@ function lockPin() {
     pin = "";
     render();
 
+    input.disabled = true;
     keys.forEach(k => (k.disabled = true));
     submitBtn.disabled = true;
     submitLabel.textContent = "PIN access locked";
@@ -72,6 +78,7 @@ function unlockPin() {
     attempts = MAX_ATTEMPTS;
     pin = "";
 
+    input.disabled = false;
     keys.forEach(k => (k.disabled = false));
     submitBtn.disabled = false;
     submitLabel.textContent = "Access my accounts";
@@ -85,6 +92,7 @@ function unlockPin() {
     clearError();
     updateAttempts();
     render();
+    input.focus({ preventScroll: true });
 }
 
 /* ---------- input ---------- */
@@ -119,18 +127,28 @@ keys.forEach(key => {
     });
 });
 
+// typing straight into the field (mainly phones)
+input.addEventListener("input", () => {
+    if (locked) return;
+    pin = input.value.replace(/\D/g, "").slice(0, PIN_LENGTH);
+    clearError();
+    render();
+});
+
 // physical keyboard
 document.addEventListener("keydown", e => {
-    if (locked) return;
+    if (locked || document.querySelector("dialog[open]")) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
 
-    if (e.key >= "0" && e.key <= "9") {
+    if (e.key.length === 1 && e.key >= "0" && e.key <= "9") {
+        e.preventDefault();          // stops the input from also receiving it
         addDigit(e.key);
     } else if (e.key === "Backspace") {
+        e.preventDefault();
         removeDigit();
     } else if (e.key === "Escape") {
         clearPin();
     } else if (e.key === "Enter") {
-        // stop Enter from "clicking" a focused keypad button
         e.preventDefault();
         form.requestSubmit();
     }
@@ -152,8 +170,7 @@ form.addEventListener("submit", e => {
     }
 
     if (pin === CORRECT_PIN) {
-        // TODO: replace with your dashboard URL, e.g. "/dashboard/"
-        alert("PIN correct! Redirect to your dashboard here.");
+        window.location.href = "/dashboard/";
         return;
     }
 
@@ -171,3 +188,8 @@ form.addEventListener("submit", e => {
 
 render();
 updateAttempts();
+
+// show the caret right away on desktop (skip on phones so the keyboard doesn't pop up)
+if (window.matchMedia("(pointer: fine)").matches) {
+    input.focus({ preventScroll: true });
+}
