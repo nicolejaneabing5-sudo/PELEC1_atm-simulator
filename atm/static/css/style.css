@@ -382,6 +382,58 @@
 }
 .site-footer a:hover { color: var(--navy); }
 
+.legal-modal {
+    width: calc(100% - 2rem);
+    max-width: 588px;
+    padding: 2.25rem;
+    border: 0;
+    border-radius: 28px;
+    background: #fff;
+    color: var(--navy);
+    box-shadow: 0 30px 80px rgba(20, 30, 60, 0.35);
+}
+
+.legal-modal::backdrop {
+    background: rgba(20, 30, 55, 0.55);
+    backdrop-filter: blur(6px);
+}
+
+.legal-logo {
+    display: block;
+    width: 160px;
+    height: auto;
+    margin-bottom: 1.5rem;
+}
+
+.legal-modal h2 {
+    margin: 0.5rem 0 1rem;
+    font-size: 1.75rem;
+}
+
+.legal-body {
+    margin: 0 0 1.75rem;
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--text);
+}
+
+.legal-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: #eef2f8;
+    color: var(--text);
+    cursor: pointer;
+}
+.legal-close svg   { width: 18px; height: 18px; }
+.legal-close:hover { background: #e1e6ef; }
+
 @media (max-width: 480px) {
     .login-card { padding: 1.5rem; }
     .features li + li { padding-left: 0; border-left: 0; }
