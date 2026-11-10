@@ -261,3 +261,10 @@ body {
     margin-inline: auto; padding: 0 1.5rem 1.5rem;
 }
 .dashboard .site-footer nav { padding-top: 1.5rem; border-top: 1px solid var(--border); }
+
+/* ---------- clickable transaction rows (dashboard list + popup) ---------- */
+.tx[role="button"] { cursor: pointer; }
+.tx[role="button"]:focus-visible { outline: 2px solid var(--amber); outline-offset: -2px; }
+
+.tx-end { text-align: right; }
+.tx-link {display: block; margin-top: 4px; font-size: 0.75rem; font-weight: 600; color: #e8431a;}

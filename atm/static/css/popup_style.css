@@ -1,0 +1,97 @@
+/*
+   POPUPS: balance inquiry, all transactions, receipt
+   Load AFTER style.css and dashboard_style.css*/
+   
+.balance-modal,
+.history-modal,
+.receipt-modal {
+    width: calc(100% - 2rem);
+    padding: 0;
+    border: 0;
+    border-radius: 28px;
+    background: #fff;
+    color: var(--navy);
+    box-shadow: 0 30px 80px rgba(20, 30, 60, 0.35);
+    scrollbar-width: thin;
+}
+
+.balance-modal::backdrop,
+.history-modal::backdrop,
+.receipt-modal::backdrop {
+    background: rgba(20, 30, 55, 0.55);
+    backdrop-filter: blur(6px);
+}
+
+.eyebrow--amber { color: var(--amber); }
+
+
+/* ---------- balance inquiry ---------- */
+.balance-modal { max-width: 588px; overflow: hidden; }
+
+.balance-head { padding: 2.25rem 2.25rem 2rem; background: var(--navy); color: #fff; }
+.balance-head h2 { margin: 0.5rem 0 0; font-size: 1.5rem; }
+.balance-modal .legal-close { background: rgba(255, 255, 255, 0.1); color: #dbe3f0; }
+.balance-modal .legal-close:hover { background: rgba(255, 255, 255, 0.18); }
+
+.balance-total { margin: 1.75rem 0 0.6rem; font-size: clamp(2.4rem, 8vw, 3.1rem); font-weight: 700; letter-spacing: -0.02em; }
+.balance-sub { margin: 0; font-size: 0.9rem; color: #8fa0c0; }
+
+.balance-body { padding: 2.25rem; }
+
+.balance-row {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1rem; padding: 1.1rem 1.25rem;
+    border: 1px solid var(--border); border-radius: 18px;
+}
+.balance-name { flex: 1; min-width: 0; }
+.balance-name strong, .balance-name small { display: block; }
+.balance-name strong { font-size: 1.05rem; }
+.balance-name small  { margin-top: 2px; font-size: 0.8rem; color: var(--muted); }
+.balance-amount { font-size: 1.1rem; white-space: nowrap; }
+
+.balance-note { display: flex; align-items: center; gap: 0.6rem; margin: 1.25rem 0 1.5rem; font-size: 0.78rem; color: var(--muted); }
+.balance-note svg { flex-shrink: 0; width: 18px; height: 18px; color: #0f9d58; }
+
+/* ---------- all transactions ---------- */
+.history-modal { max-width: 860px; overflow: hidden; }
+.history-modal[open] { display: flex; flex-direction: column; max-height: calc(100dvh - 3rem); }
+
+.history-head { padding: 2.25rem 2.25rem 1.5rem; }
+.history-head h2 { margin: 0.5rem 0 0.5rem; font-size: 1.9rem; }
+.history-sub { margin: 0; font-size: 0.9rem; color: var(--muted); }
+
+.history-list { flex: 1; min-height: 0; overflow-y: auto; border-top: 1px solid var(--border); scrollbar-width: thin; }
+.history-list .tx { padding-inline: 2.25rem; }
+
+.history-foot { margin: 0; padding: 1.1rem; border-top: 1px solid var(--border); background: #f8fafc; text-align: center; font-size: 0.8rem; color: var(--muted); }
+
+/* ---------- receipt ---------- */
+.receipt-modal { max-width: 440px; padding: 0.65rem; background: #f6f5f1; max-height: calc(100dvh - 2rem); }
+.receipt-modal .legal-close { top: 2.3rem; right: 2.45rem; width: 40px; height: 40px; }
+
+.receipt { padding: 1.75rem 1.75rem 1.5rem; border: 1px solid #e6e4dc; border-radius: 22px; background: #fff; }
+.receipt-logo { display: block; width: 130px; height: auto; }
+
+.receipt-hero { margin-top: 1.4rem; padding: 1.5rem 0; border-block: 1px dashed #c9d2e3; text-align: center; }
+.receipt-icon { display: grid; place-items: center; width: 64px; height: 64px; margin: 0 auto 1.1rem; border-radius: 50%; }
+.receipt-icon svg { width: 26px; height: 26px; }
+.receipt-icon--in  { background: #e3f6ec; color: #0f9d58; }
+.receipt-icon--out { background: #fdecea; color: var(--red); }
+
+.receipt-status { margin: 0; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.receipt-amount { margin: 0.7rem 0 0.4rem; font-size: 2.6rem; font-weight: 700; letter-spacing: -0.03em; }
+.receipt-type   { margin: 0; font-weight: 700; color: var(--text); }
+
+.receipt-rows { margin: 1.25rem 0 0; }
+.receipt-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.55rem 0; font-size: 0.9rem; }
+.receipt-row dt { color: var(--muted); }
+.receipt-row dd { margin: 0; font-weight: 700; text-align: right; }
+.receipt-ref { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.8rem; }
+
+.receipt-total { margin-top: 0.6rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.receipt-total dt { font-weight: 700; color: var(--text); }
+
+.receipt-note { margin: 1.25rem 0 0; padding: 1rem; border-radius: 14px; background: #f3f5f9; text-align: center; font-size: 0.75rem; line-height: 1.8; color: var(--muted); }
+
+.receipt-secure { display: flex; align-items: center; justify-content: center; gap: 0.4rem; margin: 0.9rem 0 0.3rem; font-size: 0.72rem; font-weight: 600; color: var(--muted); }
+.receipt-secure svg { width: 14px; height: 14px; }
