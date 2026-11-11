@@ -1,7 +1,7 @@
 {% load static %}
 <dialog class="receipt-modal" id="receipt-modal" aria-labelledby="receipt-title">
     <form method="dialog">
-        <button class="legal-close" aria-label="Close">
+        <button class="legal-close" aria-label="Close receipt">
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
@@ -9,51 +9,51 @@
     </form>
 
     <article class="receipt">
-        <img class="receipt-logo" src="{% static 'images/bank_logo.png' %}" alt="ABC Bank Logo">
+        <header class="receipt-top">
+            <img class="receipt-logo" src="{% static 'images/bank_logo.png' %}" alt="ABC Bank Logo">
+            <p class="receipt-shop">ATM Simulator</p>
+        </header>
 
         <div class="receipt-hero">
             <span class="receipt-icon receipt-icon--in" id="receipt-icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path id="receipt-icon-path" stroke-linecap="round" stroke-linejoin="round" d="" />
                 </svg>
             </span>
-            <p class="receipt-status" id="receipt-title">Transaction successful</p>
-            <p class="receipt-amount" id="receipt-amount">$0.00</p>
+            <h2 class="receipt-status" id="receipt-title">Transaction successful</h2>
+            <p class="receipt-amount" id="receipt-amount">₱0.00</p>
             <p class="receipt-type" id="receipt-type">Deposit</p>
         </div>
 
         <dl class="receipt-rows">
             <div class="receipt-row">
                 <dt>Account</dt>
-                <dd id="receipt-account"></dd>
+                <dd id="receipt-account">—</dd>
             </div>
             <div class="receipt-row">
                 <dt>Description</dt>
-                <dd id="receipt-description"></dd>
+                <dd id="receipt-description">—</dd>
             </div>
             <div class="receipt-row">
                 <dt>Date</dt>
-                <dd id="receipt-date"></dd>
+                <dd id="receipt-date">—</dd>
             </div>
             <div class="receipt-row">
                 <dt>Reference</dt>
-                <dd class="receipt-ref" id="receipt-ref"></dd>
+                <dd class="receipt-ref" id="receipt-ref">—</dd>
             </div>
             <div class="receipt-row receipt-total">
                 <dt>Balance after</dt>
-                <dd id="receipt-balance"></dd>
+                <dd id="receipt-balance">₱0.00</dd>
             </div>
         </dl>
 
-        <p class="receipt-note">
-            This receipt confirms your simulated transaction.<br>Please retain it for your records.
-        </p>
-    </article>
+        <div class="receipt-barcode" aria-hidden="true"></div>
 
-    <p class="receipt-secure">
-        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-        </svg>
-        Secure ABC Bank receipt
-    </p>
+        <p class="receipt-note">
+            This receipt confirms your simulated transaction.<br>
+            Please retain it for your records.
+        </p>
+        <p class="receipt-thanks">*** Thank you for banking with ABC ***</p>
+    </article>
 </dialog>

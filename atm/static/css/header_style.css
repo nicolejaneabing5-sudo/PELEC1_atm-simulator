@@ -1,0 +1,67 @@
+.site-header { 
+    background: #fff; 
+    border-bottom: 1px solid var(--border); 
+}
+
+.site-header .logo img { 
+    width: 170px; 
+}
+
+.header-inner { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    height: 90px; 
+}
+.header-actions { 
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
+}
+
+.bell-btn { 
+    width: 40px; 
+    height: 40px; 
+    border: 0; 
+    background: transparent; 
+    color: var(--muted); 
+    cursor: pointer; 
+}
+.bell-btn svg { 
+    width: 22px; 
+    height: 22px; 
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 0 0 1.25rem;
+    border: 0;
+    border-left: 1px solid var(--border);
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+.user-menu > svg { 
+    width: 12px; 
+    height: 12px; 
+    color: var(--muted); 
+}
+
+.avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+.user-info strong { 
+    font-size: 0.95rem; 
+}
+.user-info small  { 
+    font-size: 0.75rem; 
+}

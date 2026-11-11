@@ -3,7 +3,7 @@
 const LIMIT_PER_TX = 25000;
 const LIMIT_DAILY  = 50000;
 const OVERDRAFT    = 500;   // checking only
-const RECENT_COUNT = 4;     // rows shown on the dashboard, the rest are in view all
+const RECENT_COUNT = 5;     // rows shown on the dashboard, the rest are in view all
 
 const accounts = {
     checking: { name: "Checking Account", short: "Checking", last4: "4821", balance: 8240.50,  withdrawn: 0, overdraft: true  },
@@ -14,10 +14,11 @@ const transactions = [
     { title: "Payroll deposit", date: "Apr 24, 2025", account: "checking", amount:  2450, ref: "ABC-04242450" },
     { title: "ATM withdrawal",  date: "Apr 22, 2025", account: "checking", amount:  -100, ref: "ABC-04220100" },
     { title: "Monthly savings", date: "Apr 21, 2025", account: "savings",  amount:   750, ref: "ABC-04210750" },
-    { title: "Cash deposit",    date: "Apr 18, 2025", account: "checking", amount:   480, ref: "ABC-04180480" }
+    { title: "Cash deposit",    date: "Apr 18, 2025", account: "checking", amount:   480, ref: "ABC-04180480" },
+    { title: "Cash deposit",    date: "Apr 17, 2025", account: "savings", amount:   500, ref: "ABC-04170500" }
 ];
 
-const money = n => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
+const money = n => new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" }).format(n);
 const round2 = n => Math.round(n * 100) / 100;
 
 /* ---------- balance after each transaction ---------- */

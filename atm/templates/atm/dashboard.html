@@ -5,10 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABC Dashboard</title>
+    <link rel="icon" type="image/png" href="{% static 'images/bank_logo.png' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer_style.css' %}">
     <link rel="stylesheet" href="{% static 'css/dashboard_style.css' %}">
     <link rel="stylesheet" href="{% static 'css/popup_style.css' %}"
 </head>
+
 <body class="dashboard">
 
     <header class="site-header">
@@ -24,7 +28,6 @@
                     </svg>
                 </button>
 
-                <!-- goes back to the PIN page -->
                 <a href="/" class="user-menu">
                     <span class="avatar" aria-hidden="true">JD</span>
                     <span class="user-info">
@@ -51,7 +54,7 @@
             <div class="total">
                 <small>Total balance</small>
                 <p>
-                    <strong id="total-balance">$21,100.72</strong>
+                    <strong id="total-balance">₱21,100.72</strong>
                     <a href="#" class="round-link" id="balance-link" role="button" aria-haspopup="dialog" aria-label="View balance details">
                         <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
@@ -81,11 +84,11 @@
                 </span>
 
                 <span class="balance-label">Available balance</span>
-                <span class="balance" data-balance="checking">$8,240.50</span>
+                <span class="balance" data-balance="checking">₱8,240.50</span>
 
                 <span class="limit">
                     <span>Withdrawn today</span>
-                    <span><b data-withdrawn="checking">$0.00</b> / $50,000</span>
+                    <span><b data-withdrawn="checking">₱0.00</b> / ₱50,000</span>
                 </span>
                 <span class="meter"><span data-meter="checking" style="width: 0%"></span></span>
             </label>
@@ -107,11 +110,11 @@
                 </span>
 
                 <span class="balance-label">Available balance</span>
-                <span class="balance" data-balance="savings">$12,860.22</span>
+                <span class="balance" data-balance="savings">₱12,860.22</span>
 
                 <span class="limit">
                     <span>Withdrawn today</span>
-                    <span><b data-withdrawn="savings">$0.00</b> / $50,000</span>
+                    <span><b data-withdrawn="savings">₱0.00</b> / ₱50,000</span>
                 </span>
                 <span class="meter"><span data-meter="savings" style="width: 0%"></span></span>
             </label>
@@ -128,7 +131,7 @@
                     <a href="#" class="view-all" id="view-all-link" role="button" aria-haspopup="dialog">View all ›</a>
                 </header>
 
-                <!-- rows are drawn by dashboard.js -->
+                
                 <ul class="tx-list" id="tx-list"></ul>
             </section>
 
@@ -156,17 +159,17 @@
                     <label for="amount" class="field-label">Amount</label>
 
                     <div class="amount-field">
-                        <span class="currency-sign" aria-hidden="true">$</span>
+                        <span class="currency-sign" aria-hidden="true">₱</span>
                         <input type="text" id="amount" inputmode="decimal" placeholder="0.00" autocomplete="off">
-                        <span class="currency-code">USD</span>
+                        <span class="currency-code">PHP</span>
                     </div>
 
                     <p class="tx-message" id="tx-message" role="alert" hidden></p>
 
                     <div class="quick-amounts" role="group" aria-label="Quick amounts">
-                        <button type="button" data-amount="50">$50</button>
-                        <button type="button" data-amount="100">$100</button>
-                        <button type="button" data-amount="200">$200</button>
+                        <button type="button" data-amount="50">₱50</button>
+                        <button type="button" data-amount="100">₱100</button>
+                        <button type="button" data-amount="200">₱200</button>
                     </div>
 
                     <button type="submit" class="btn-amber">
@@ -182,9 +185,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                     </svg>
                     <div>
-                        <p><strong>Withdrawal limits: $25,000 per transaction • $50,000 daily</strong></p>
-                        <p id="limits-today">Withdrawn today: $0.00 • $50,000.00 remaining</p>
-                        <p id="overdraft-note">Checking includes up to $500 of overdraft protection.</p>
+                        <p><strong>Withdrawal limits: ₱25,000 per transaction • ₱50,000 daily</strong></p>
+                        <p id="limits-today">Withdrawn today: ₱0.00 • ₱50,000.00 remaining</p>
+                        <p id="overdraft-note">Checking includes up to ₱500 of overdraft protection.</p>
                     </div>
                 </div>
             </section>
