@@ -21,7 +21,7 @@ class Account:
         self.balance = money(balance)
         self.account_type = account_type # stores the account type (Savings or Checkings)
         if self.__balance < 0:
-            raise ATMError("Initial balance cannot be negative.")
+            raise ATMError('Initial balance cannot be negative.')
         self.transaction_history = []
         
     @property
@@ -32,42 +32,94 @@ class Account:
     # validate amount
     def validate_amount(self, amount):
         try:
-            amount = money(amount)
+            amt = money(amount)
         except (InvalidOperation, ValueError, TypeError):
-            raise ATMError("Invalid input. Please enter a numeric amount.")
+            raise ATMError('Invalid input. Please enter a numeric amount.')
 
-        if amount <= 0:
-            raise ATMError("Amount must be greater than zero.")
-
-        return amount
+        if amt <= 0:
+            raise ATMError('Amount must be greater than zero.')
+        return amt
 
     # deposit validation
     def deposit(self, amount):
-        amount = self.validate_amount(amount)
+        amt = self.validate_amount(amount)
 
         # Balance update happens safely after validation passes
-        self.__balance = money(self.__balance + amount)
+        new_balance = self.__balance + amt
+        self.__balance = money(new_balance)
 
-        transaction = Transaction(datetime.now(), "Deposit", amount, None)
-
+        transaction = Transaction(datetime.now(), 'Deposit', amt, None)
         self.transaction_history.append(transaction)
-
-        return self.__balancebalance
+        return transaction
 
     # withdraw validation
     def withdraw(self, amount):
-        amount = self.validate_amount(amount)
-
-        if amount > self.__balance:
-            raise ATMError("Insufficient balance. Withdrawal denied.")
-
-        self.__balance = money(self.__balance - amount)
-
-        transaction = Transaction(datetime.now(), "Withdrawal", amount, None)
-
+            raise NotImplementedError('Subclasses must implement withdraw().')
+    
+class SavingsAccount(Account):
+    def __init__(self, account_number, balance, max_transaction=Decimal('10000.00'), daily_max=Decimal('50000.00'), min_remain_balance=Decimal('500.00')):
+        super().__init__(account_number, balance, 'Savings Account')
+        self.max_transaction = money(max_transaction)
+        self.daily_max = money(daily_max)
+        self.min_remain_balance = money(min_remain_balance)
+        self.__daily_widthdraw = Decimal('0.00')
+        
+    def withdraw(self, amount):
+        amt = self.validate_amount(amount)
+            
+        # Check per-transaction limit (10 000)
+        if amt > self.max_transaction:
+            raise ATMError(f'Transaction limit exceeded. Maximum withdrawal per transaction is ${self.max_transaction}.')
+        
+        # Check cumulative daily maximum limit (50 000)
+        if (self.__daily_widthdraw + amt) > self.daily_max:
+            raise ATMError(f'Daily withdrawal limit exceeded.Remaining daily limit is ${self.daily_max - self.__daily_widthdraw}.')
+        
+        # Check minimum remaining balance rule (500)
+        if (self.balance - amt) < self.min_remain_balance:
+            raise ATMError(f'Savings accout must maintain a minimum balance of ${self.min_remain_balance}')
+        
+        new_balance = self.__balance - amt
+        if new_balance < 0:
+            raise ATMError('Operation results is an invalid balance.')
+        
+        self.__balance = money(new_balance)
+        transaction  = Transaction(datetime.now(), 'WITHDRAWAL (Saving)', amt, None)
         self.transaction_history.append(transaction)
-
-        return self.__balance
+        return transaction
+        
+class CheckingAccount(Account):
+    def __init__(self, account_number, balance, max_transaction=Decimal('25000.00'), daily_max=Decimal('50000.00'), overdraft_protection=Decimal('500')):
+        super().__init__(account_number, balance, 'Checking Account')
+        self.max_transaction = money(max_transaction)
+        self.daily_max = money(daily_max)
+        self.overdraft_protection = money(overdraft_protection)
+        self.__daily_withdraw = Decimal('0.00')
+        
+    def withdraw(self, amount):
+        amt = self.validate_amount(amount)
+        
+        # Check per-transaction limit (25 000)
+        if amt > self.max_transaction:
+            raise ATMError(f'Transaction limit exceeded. Maximum withdrawal per transaction is ${self.max_transaction}.')
+        
+        # Check cumulative daily maximum limit (50 000)
+        if (self.__daily_withdraw + amt) > self.daily_max:
+            raise ATMError(f'Daily withdrawal limit exceeded.Remaining daily limit is ${self.daily_max - self.__daily_widthdraw}.')
+        
+        # Check overdraft protection limit
+        max_allowed = self.balance + self.overdraft_limit
+        if amt > max_allowed:
+            raise ATMError(f'Overdraft limit exceeded in an invalid balance exceeding overdraft.')
+        
+        new_balance = self._balance - amt
+        if new_balance < -self.overdraft_limit:
+            raise ATMError('Operation results in an invalif balance exceeding overdraft.')
+        
+        self._balance = money(new_balance)
+        transaction  = Transaction(datetime.now(), 'WITHDRAWAL (Checking)', amt, None)
+        self.transaction_history.append(transaction)
+        return transaction
 
     # check account balance
     def check_balance(self):
