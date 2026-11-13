@@ -3,9 +3,7 @@
     <header class="history-head">
         <form method="dialog">
             <button class="legal-close" aria-label="Close">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                </svg>
+                <svg aria-hidden="true" stroke-width="1.8"><use href="#icon-close"></use></svg>
             </button>
         </form>
 
@@ -14,8 +12,11 @@
         <p class="history-sub" id="history-count">0 transactions across checking and savings</p>
     </header>
 
-    <!-- rows are drawn by dashboard.js -->
-    <ul class="tx-list history-list" id="history-list"></ul>
+    <ul class="tx-list history-list" id="history-list">
+        {% for row in history %}
+            {% include 'atm/tx_row.html' with row=row full=True %}
+        {% endfor %}
+    </ul>
 
     <p class="history-foot">Select any transaction to view its receipt.</p>
 </dialog>

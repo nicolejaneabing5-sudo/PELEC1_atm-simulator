@@ -2,9 +2,7 @@
 <dialog class="receipt-modal" id="receipt-modal" aria-labelledby="receipt-title">
     <form method="dialog">
         <button class="legal-close" aria-label="Close receipt">
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>
+            <svg aria-hidden="true" stroke-width="1.8"><use href="#icon-close"></use></svg>
         </button>
     </form>
 
@@ -16,9 +14,7 @@
 
         <div class="receipt-hero">
             <span class="receipt-icon receipt-icon--in" id="receipt-icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path id="receipt-icon-path" stroke-linecap="round" stroke-linejoin="round" d="" />
-                </svg>
+                <svg stroke-width="1.5"><use id="receipt-icon-use" href="#icon-arrow-down-left"></use></svg>
             </span>
             <h2 class="receipt-status" id="receipt-title">Transaction successful</h2>
             <p class="receipt-amount" id="receipt-amount">₱0.00</p>
