@@ -1,40 +1,65 @@
 from atm.oop.domain import ATMError
 
+
 class ATMService:
     """
-    Manages active accounts and handles session states (authentication, 
-    current user tracking, and session logout).
+    Manages active accounts and ATM session states.
     """
-    def __init__(self, accounts_dict: dict):
-        self.accounts = accounts_dict
-        self.current_account_number = None
 
-    def authenticate(self, account_number: str, pin: str) -> bool:
-        """
-        Validates account existence and PIN, then establishes the active session state.
-        """
-        if account_number not in self.accounts:
-            raise ATMError("Account not found.")
+    def __init__(self, accounts, pin = "1234"):
+        self.__accounts = accounts
+        self.__pin = str(pin)
+        self.__session_active = False
+        self.__failed_attempts = 0
+        self.__max_attempts = 3
         
-        account = self.accounts[account_number]
-        
-        # Verify PIN via domain model method or attribute
-        if hasattr(account, 'verify_pin'):
-            if not account.verify_pin(pin):
-                raise ATMError("Invalid PIN.")
-        elif getattr(account, 'pin', None) != pin:
-            raise ATMError("Invalid PIN.")
+    # login
+    def authenticate(self, pin):
 
-        # Set active session state
-        self.current_account_number = account_number
+        if self.__session_active:
+            raise ATMError("ATM is already unlocked.")
+
+        if self.__failed_attempts >= self.__max_attempts:
+            raise ATMError("ATM access is locked.")
+
+        if str(pin) != self.__pin:
+            self.__failed_attempts += 1
+
+            remaining = self.__max_attempts - self.__failed_attempts
+
+            if remaining == 0:
+                raise ATMError("PIN locked after three incorrect attempts.")
+
+            raise ATMError(
+                f"Incorrect PIN. {remaining} attempts remaining."
+            )
+
+        self.__session_active = True
+        self.__failed_attempts = 0
+
         return True
 
-    def logout(self) -> None:
-        """Clears the active session state."""
-        self.current_account_number = None
+    # logout
+    def logout(self):
+        if not self.__session_active:
+            raise ATMError("ATM is already locked.")
 
-    def get_current_account(self):
-        """Returns the account object for the currently active session."""
-        if self.current_account_number and self.current_account_number in self.accounts:
-            return self.accounts[self.current_account_number]
-        return None
+        self.__session_active = False
+
+    # get current account
+    def get_accounts(self):
+        if not self.__session_active:
+            raise ATMError("Please unlock the ATM first.")
+
+        return self.__accounts
+    
+    def reset_lock(self):
+        if self.__session_active:
+            raise ATMError("ATM is already unlocked.")
+        
+        self.__failed_attempts = 0
+
+    # check if session is active
+    @property
+    def session_active(self):
+        return self.__session_active
