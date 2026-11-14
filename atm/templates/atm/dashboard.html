@@ -152,6 +152,7 @@
                 </div>
 
                 <form id="tx-form" novalidate>
+                    {% csrf_token %} 
                     <label for="amount" class="field-label">Amount</label>
 
                     <div class="amount-field">

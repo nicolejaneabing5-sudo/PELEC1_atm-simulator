@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert Card - ABC ATM</title>
+    <link rel="stylesheet" href="{% static 'css/card_insert.css' %}">
+</head>
+<body class="card-insert-page">
+
+    <main class="insert-container">
+        <!-- Left Hero Content -->
+        <section class="insert-hero">
+            <div class="brand-logo-container">
+                <img src="{% static 'images/bank_logo.png' %}" alt="ABC Logo" class="main-logo-img">
+            </div>
+
+            <p class="eyebrow eyebrow--maroon">ABC SECURE ACCESS</p>
+            <h1>Insert your card to begin.</h1>
+            <p class="hero-desc">Drag and insert your debit card into the ATM slot or click the button below to access your account.</p>
+            
+            <!-- Step Indicators -->
+            <div class="steps-indicator">
+                <div class="step active">
+                    <span class="step-num">01</span>
+                    <span class="step-label">Insert card</span>
+                </div>
+                <div class="step">
+                    <span class="step-num">02</span>
+                    <span class="step-label">Enter PIN</span>
+                </div>
+                <div class="step">
+                    <span class="step-num">03</span>
+                    <span class="step-label">Choose transaction</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Side: ATM Slot & Card -->
+        <section class="atm-machine-visual">
+            <div class="atm-slot-panel">
+                <div class="atm-slot-header">
+                    <span class="atm-label-text">INSERT CARD</span>
+                    <div class="slot-light" id="slot-light"></div>
+                </div>
+                
+                <!-- ATM Bezel Slot -->
+                <div class="card-slot-mouth" id="card-slot-mouth">
+                    <div class="card-slot-opening"></div>
+                </div>
+
+                <!-- Stage holding the card -->
+                <div class="card-stage" id="card-stage">
+                    <div class="debit-card" id="debit-card">
+                        <div class="card-pattern"></div>
+                        <div class="card-arc"></div>
+
+                        <div class="card-header-row">
+                            <span class="black-logo">atm-c</span>
+                            <div class="contactless-icon">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+
+                        <div class="card-middle-row">
+                            <div class="silver-chip">
+                                <div class="chip-line horizontal"></div>
+                                <div class="chip-line vertical"></div>
+                            </div>
+                            <span class="debit-badge">debit</span>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="card-details">
+                                <div class="card-number">5412 7512 3412 3456</div>
+                                <div class="card-expiry-row">
+                                    <span class="expiry-label">VALID THRU</span>
+                                    <span class="expiry-date">12/23</span>
+                                </div>
+                                <div class="cardholder-name">Nicole Charmaine Angel Jane Lorine T.</div>
+                            </div>
+                            <div class="card-brand-circles">
+                                <div class="circle circle-left"></div>
+                                <div class="circle circle-right"></div>
+                                <span class="brand-text">mastercard</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manual Insert Button -->
+                <button type="button" class="btn-insert-card" id="insert-btn" onclick="triggerCardInsertion()">
+                    Insert card &rarr;
+                </button>
+                <p class="insert-hint" id="status-hint">Drag card up into the slot or click the button.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'js/card_insert.js' %}"></script>
+</body>
+</html>
