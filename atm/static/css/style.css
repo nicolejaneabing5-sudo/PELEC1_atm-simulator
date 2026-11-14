@@ -1,0 +1,300 @@
+:root {
+    --navy: #141e37;
+    --text: #4a5a78;
+    --muted: #8a97ad;
+    --slate: #8fa0c0;
+    --border: #e1e6ef;
+    --line: #c9d2e3;
+    --surface: #eef2f8;
+    --red: #e0001a;
+    --red-soft: #f87171;
+    --orange: #e8431a;
+    --amber: #f59e0b;
+    --gold: #d98a1f;
+    --green: #0f9d58;
+    --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* reset */
+*, *::before, *::after { 
+    box-sizing: border-box; 
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;     
+    font-family: var(--font);
+    color: var(--navy);
+}
+
+h1, h2, p, dl, dd { 
+    margin: 0; 
+}
+ul { 
+    margin: 0; 
+    padding: 0; 
+    list-style: none; 
+}
+a { 
+    color: inherit; 
+    text-decoration: none; 
+}
+button, input { 
+    font: inherit; 
+}
+[hidden] { 
+    display: none !important; 
+}
+:focus-visible { 
+    outline: 2px solid var(--amber); 
+    outline-offset: 2px; 
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* widths */
+.container, .page, .site-footer {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+}
+
+/* shared styling */
+.logo img { 
+    display: block; 
+    width: 200px; 
+    height: auto; 
+}
+
+.eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+}
+.eyebrow--orange { 
+    color: var(--orange); 
+}
+.eyebrow--amber  { 
+    color: var(--amber); 
+}
+.eyebrow--light  { 
+    color: var(--slate); 
+}
+
+/* centered icon box */
+.icon, .icon-tile, .lock-icon, .avatar, .round-link, .bell-btn, .receipt-icon, .legal-close {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+/* bold title with muted line */
+.feature-text, .tx-text, .user-info, .balance-name { 
+    display: grid; 
+}
+.feature-text small, .tx-text small, .user-info small,
+.balance-name small, .account-head small {
+    margin-top: 2px;
+    color: var(--muted);
+}
+
+/* buttons */
+.btn-primary, .btn-amber {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    border: 0;
+    font-weight: 700;
+    cursor: pointer;
+}
+.btn-primary svg, .btn-amber svg { 
+    width: 14px; height: 14px; 
+}
+
+.btn-primary {
+    height: 52px;
+    border-radius: 12px;
+    color: #fff;
+    background: var(--navy);
+    box-shadow: 0 10px 20px rgba(20, 30, 55, 0.25);
+}
+.btn-primary svg { 
+    color: var(--amber); 
+}
+.btn-primary:disabled { 
+    background: #c3cddc; 
+    box-shadow: none; 
+    cursor: not-allowed; 
+}
+
+.btn-amber {
+    height: 60px;
+    border-radius: 14px;
+    color: var(--navy);
+    background: var(--amber);
+    box-shadow: 0 10px 24px rgba(245, 158, 11, 0.35);
+    transition: filter 0.15s;
+}
+.btn-amber:hover { 
+    filter: brightness(1.05); 
+}
+.btn-amber:focus-visible { 
+    outline-color: #fff; 
+    outline-offset: 3px; 
+}
+
+/* footer */
+.site-footer { 
+    padding-block: 0 1.5rem; 
+}
+.site-footer nav { 
+    padding-top: 1.25rem; 
+}
+.site-footer ul { 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 1.25rem; 
+}
+.site-footer small, .site-footer a { 
+    font-size: 0.75rem; 
+    font-weight: 600; 
+    color: var(--muted); 
+}
+.site-footer a:hover { 
+    color: var(--navy); 
+}
+
+/* modal */
+.legal-modal, .balance-modal, .history-modal, .receipt-modal {
+    width: calc(100% - 2rem);
+    max-width: 588px;
+    padding: 0;
+    border: 0;
+    border-radius: 28px;
+    background: #fff;
+    color: var(--navy);
+    box-shadow: 0 30px 80px rgba(20, 30, 60, 0.35);
+}
+
+dialog::backdrop {
+    background: rgba(20, 30, 55, 0.55);
+    backdrop-filter: blur(6px);
+}
+
+.legal-modal { 
+    padding: 2.25rem; 
+}
+.legal-modal h2 { 
+    margin: 0.5rem 0 1rem; 
+    font-size: 1.75rem; 
+}
+.legal-logo { 
+    display: block; 
+    width: 160px; 
+    height: auto; 
+    margin-bottom: 1.5rem; 
+}
+.legal-body { 
+    margin-bottom: 1.75rem; 
+    font-size: 0.95rem; 
+    line-height: 1.9; color: var(--text); 
+}
+
+.legal-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+}
+.legal-close svg   { 
+    width: 18px; 
+    height: 18px; 
+}
+.legal-close:hover { 
+    background: var(--border); 
+}
+
+/* icon tiles */
+.icon-tile { 
+    width: 46px; height: 46px; border-radius: 14px; 
+}
+.icon-tile svg { 
+    width: 22px; height: 22px; 
+}
+.icon-tile--red   { 
+    background: #fdecea; 
+    color: var(--orange); 
+}
+.icon-tile--amber { 
+    background: #fff3dc; 
+    color: var(--gold); 
+}
+.icon-tile--green, .receipt-icon--in { 
+    background: #e3f6ec; 
+    color: var(--green); 
+}
+
+/* transaction */
+.tx { 
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
+    padding: 1.1rem 2rem; 
+    transition: background 0.15s; 
+}
+.tx + .tx { 
+    border-top: 1px solid var(--border); 
+}
+.tx:hover { 
+    background: #f8fafc; 
+}
+.tx[role="button"] { 
+    cursor: pointer; 
+}
+.tx[role="button"]:focus-visible { 
+    outline-offset: -2px; 
+}
+
+.tx-text { 
+    flex: 1; 
+}
+.tx-text small { 
+    font-size: 0.8rem; 
+}
+.tx-amount { 
+    font-weight: 700; 
+}
+.tx-amount--in { 
+    color: var(--green); 
+}
+.tx-end  { 
+    text-align: right; 
+}
+.tx-link { 
+    display: block; 
+    margin-top: 4px; 
+    font-size: 0.75rem; 
+    font-weight: 600; 
+    color: var(--orange); 
+}

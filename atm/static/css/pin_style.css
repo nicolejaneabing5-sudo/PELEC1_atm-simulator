@@ -1,0 +1,308 @@
+
+.pin-entry {
+    background: linear-gradient(135deg, #f6e4e5 0%, #eaeef4 20%, #eaeef4 65%, #f2e7de 100%) no-repeat fixed;
+}
+
+/* ---------- layout ---------- */
+.page {
+    flex: 1;
+    padding-block: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.5rem;
+}
+
+/* ---------- hero (left) ---------- */
+.hero .eyebrow { 
+    margin-top: 2.5rem; 
+}
+
+.hero h1 {
+    margin: 0.75rem 0 1.25rem;
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.hero-desc { 
+    margin: 1rem 0 1.5rem; 
+    font-size: 0.95rem; 
+    line-height: 1.6; 
+    color: var(--text); 
+}
+
+.features { 
+    display: flex; 
+    gap: 2rem; 
+}
+.features li { 
+    display: flex; 
+    align-items: center; 
+    gap: 0.75rem; 
+}
+.features li + li { 
+    padding-left: 2rem; 
+    border-left: 1px solid #cbd5e1; 
+}
+
+.feature-text strong { 
+    font-size: 0.85rem; 
+}
+.feature-text small  { 
+    font-size: 0.7rem; 
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.icon svg { 
+    width: 20px; 
+    height: 20px; 
+}
+.icon--red    { 
+    color: #e02424; 
+}
+.icon--orange { 
+    color: var(--gold); 
+}
+
+/* ---------- login card (right) ---------- */
+.login-card {
+    width: 100%;
+    max-width: 470px;
+    padding: 2.25rem;
+    background: #fff;
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(20, 30, 60, 0.12);
+}
+
+.card-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start; 
+}
+.card-header h2 { 
+    margin: 0.35rem 0 0; 
+    font-size: 1.6rem; 
+}
+.card-desc { 
+    margin: 1rem 0 1.5rem; 
+    font-size: 0.95rem; 
+    line-height: 1.6; 
+    color: var(--text); 
+}
+
+/* lock button */
+.lock-icon {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 0;
+    border-radius: 14px;
+    background: var(--navy);
+    color: #fff;
+    cursor: default;
+}
+.lock-icon svg { 
+    width: 20px; 
+    height: 20px; 
+}
+.lock-icon .icon-open { 
+    display: none; 
+}
+.lock-icon:focus-visible { 
+    outline-offset: 3px; 
+}
+
+.lock-icon.is-locked {
+    background: var(--red-soft);
+    box-shadow: 0 8px 18px rgba(248, 113, 113, 0.4);
+    cursor: pointer;
+}
+.lock-icon.is-locked .icon-closed { 
+    display: none; 
+}
+.lock-icon.is-locked .icon-open   { 
+    display: block; 
+}
+.lock-icon.is-locked:hover        { 
+    background: #ef5b5b; 
+}
+
+/* PIN field */
+.pin-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 64px;
+    padding: 0 1.25rem;
+    background: #f7f9fc;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+}
+.pin-field:focus-within,
+.pin-field.is-active { 
+    border-color: var(--amber); 
+    background: #fff; 
+}
+.pin-field.is-error  { 
+    border-color: var(--red); 
+    background: #fff; 
+}
+.pin-field.is-locked { 
+    border-color: var(--red-soft); 
+    background: #f7f9fc; 
+}
+
+.pin-input { 
+    position: absolute; 
+    inset: 0; 
+    width: 100%; 
+    height: 100%; 
+    opacity: 0; 
+    cursor: text; 
+}
+
+.pin-lock  { 
+    width: 20px; 
+    height: 20px; 
+    color: var(--muted); 
+}
+.pin-dots  { 
+    display: flex; 
+    flex: 1; 
+    gap: 0.9rem; 
+}
+.dot       { 
+    width: 8px; 
+    height: 8px; 
+    border-radius: 50%; 
+    background: #c3cddc; 
+}
+.dot.filled { 
+    background: var(--navy); 
+}
+
+.dot.current { 
+    position: relative; 
+}
+.dot.current::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: -8px;
+    width: 1px;
+    height: 24px;
+    background: var(--navy);
+    animation: blink 1s steps(1) infinite;
+}
+.pin-field:not(:focus-within) .dot.current::before { 
+    display: none; 
+}
+
+@keyframes blink { 
+    50% { opacity: 0; } 
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dot.current::before { animation: none; }
+}
+
+.pin-count { 
+    font-size: 0.75rem; 
+    font-weight: 700; 
+    color: var(--muted); 
+}
+
+/* error + attempts */
+.pin-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin: 0.6rem 0 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--red);
+}
+.pin-error svg { 
+    flex-shrink: 0; 
+    width: 14px; 
+    height: 14px; 
+    margin-top: 1px; 
+}
+
+.pin-meta { 
+    display: flex; 
+    justify-content: space-between; 
+    margin: 0.6rem 0 1rem; 
+    font-size: 0.75rem; 
+    color: var(--muted); 
+}
+.pin-meta strong { color: var(--navy); }
+
+/* keypad */
+.keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+
+.key {
+    height: 48px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.05s;
+}
+.key:hover  { 
+    background: #f3f6fb; 
+}
+.key:active { 
+    transform: scale(0.97); 
+}
+.key:disabled { 
+    background: var(--surface); 
+    color: #c3cddc; 
+    cursor: not-allowed; 
+    transform: none; 
+}
+
+.key--text {
+    border-color: transparent;
+    background: transparent;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+.key--text svg { 
+    width: 20px; 
+    height: 20px; 
+}
+.key--text:disabled { 
+    background: transparent; 
+}
+
+.disclaimer { 
+    margin-top: 1.25rem; 
+    text-align: center; 
+    font-size: 0.7rem; 
+    line-height: 1.8; 
+    color: var(--muted); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 480px) {
+    .login-card { padding: 1.5rem; }
+    .features li + li { padding-left: 0; border-left: 0; }
+}
+
+@media (min-width: 900px) {
+    .page { flex-direction: row; align-items: center; justify-content: space-between; gap: 4rem; }
+}

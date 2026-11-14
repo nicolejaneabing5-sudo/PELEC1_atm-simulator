@@ -1,0 +1,17 @@
+{% load static %}
+<dialog class="legal-modal" id="legal-modal" aria-labelledby="legal-title">
+    <form method="dialog">
+        <button class="legal-close" aria-label="Close">
+            <svg aria-hidden="true" stroke-width="1.8"><use href="#icon-close"></use></svg>
+        </button>
+    </form>
+
+    <img class="legal-logo" src="{% static 'images/bank_logo.png' %}" alt="ABC Bank Logo">
+    <p class="eyebrow">Legal</p>
+    <h2 id="legal-title">Terms of use</h2>
+    <p class="legal-body" id="legal-body"></p>
+
+    <form method="dialog">
+        <button class="btn-primary">Got it</button>
+    </form>
+</dialog>

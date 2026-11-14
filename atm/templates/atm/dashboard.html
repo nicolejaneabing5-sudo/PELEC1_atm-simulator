@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC Dashboard</title>
+    <link rel="icon" type="image/png" href="{% static 'images/bank_logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/popup_style.css' %}">
+</head>
+
+<body class="dashboard">
+     {% include 'atm/icons.html' %}
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="{% url 'atm:dashboard' %}" class="logo">
+                <img src="{% static 'images/bank_logo.png' %}" alt="ABC Bank Logo">
+            </a>
+
+            <div class="header-actions">
+                <button type="button" class="bell-btn" aria-label="Notifications">
+                    <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-bell"></use></svg>
+                </button>
+
+                <a href="{% url 'atm:pin_entry' %}" class="user-menu">
+                    <span class="avatar" aria-hidden="true">JD</span>
+                    <span class="user-info">
+                        <strong>Nicole Jane Abing</strong>
+                        <small>Lock session</small>
+                    </span>
+                    <svg aria-hidden="true" stroke-width="2"><use href="#icon-chevron-down"></use></svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container dashboard-main">
+
+        <section class="greeting">
+            <div>
+                <p class="eyebrow eyebrow--orange">ATM Simulator</p>
+                <h1 id="greeting-title" data-name="{{ first_name }}">Good morning, {{ first_name }}</h1>
+                <p class="greeting-sub">Choose an account to begin a transaction.</p>
+            </div>
+
+            <div class="total">
+                <small>Total balance</small>
+                <p>
+                    <strong id="total-balance">₱21,100.72</strong>
+                    <a href="#" class="round-link" id="balance-link" role="button" aria-haspopup="dialog" aria-label="View balance details">
+                        <svg aria-hidden="true" stroke-width="2"><use href="#icon-chevron-right"></use></svg>
+                    </a>
+                </p>
+            </div>
+        </section>
+
+        <fieldset class="accounts">
+            <legend class="visually-hidden">Choose an account</legend>
+
+            <label class="account-card">
+                <input type="radio" name="account" value="checking" class="visually-hidden" checked>
+                <span class="radio-mark" aria-hidden="true"></span>
+
+                <span class="account-head">
+                    <span class="icon-tile icon-tile--red" aria-hidden="true">
+                        <svg stroke-width="1.5"><use href="#icon-bank"></use></svg>
+                    </span>
+                    <span>
+                        <strong>Checking Account</strong>
+                        <small>•••• 4821</small>
+                    </span>
+                </span>
+
+                <span class="balance-label">Available balance</span>
+                <span class="balance" data-balance="checking">₱8,240.50</span>
+
+                <span class="limit">
+                    <span>Withdrawn today</span>
+                    <span><b data-withdrawn="checking">₱0.00</b> / ₱50,000</span>
+                </span>
+                <span class="meter"><span data-meter="checking" style="width: 0%"></span></span>
+            </label>
+
+            <label class="account-card">
+                <input type="radio" name="account" value="savings" class="visually-hidden">
+                <span class="radio-mark" aria-hidden="true"></span>
+
+                <span class="account-head">
+                    <span class="icon-tile icon-tile--amber" aria-hidden="true">
+                         <svg stroke-width="1.5"><use href="#icon-wallet"></use></svg>
+                    </span>
+                    <span>
+                        <strong>Savings Account</strong>
+                        <small>•••• 9017</small>
+                    </span>
+                </span>
+
+                <span class="balance-label">Available balance</span>
+                <span class="balance" data-balance="savings">₱12,860.22</span>
+
+                <span class="limit">
+                    <span>Withdrawn today</span>
+                    <span><b data-withdrawn="savings">₱0.00</b> / ₱50,000</span>
+                </span>
+                <span class="meter"><span data-meter="savings" style="width: 0%"></span></span>
+            </label>
+        </fieldset>
+
+        <div class="dashboard-grid">
+
+            <section class="panel transactions" aria-labelledby="tx-title">
+                <header class="panel-head">
+                    <div>
+                        <h2 id="tx-title">Transactions</h2>
+                        <p>Checking and savings accounts</p>
+                    </div>
+                    <a href="#" class="view-all" id="view-all-link" role="button" aria-haspopup="dialog">View all ›</a>
+                </header>
+
+                
+                <ul class="tx-list" id="tx-list" data-max="5">
+                    {% for row in recent %}
+                        {% include 'atm/tx_row.html' with row=row full=False %}
+                    {% endfor %}
+                </ul>
+
+            </section>
+
+            <section class="new-tx" aria-labelledby="new-tx-title">
+                <div class="new-tx-head">
+                    <div>
+                        <p class="eyebrow eyebrow--light">New transaction</p>
+                        <h2 id="new-tx-title">Checking Account</h2>
+                    </div>
+                    <span class="chip">•••• 4821</span>
+                </div>
+
+                <div class="segmented" role="radiogroup" aria-label="Transaction type">
+                    <label>
+                        <input type="radio" name="tx-type" value="deposit" class="visually-hidden" checked>
+                        <span>Deposit</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="tx-type" value="withdrawal" class="visually-hidden">
+                        <span>Withdrawal</span>
+                    </label>
+                </div>
+
+                <form id="tx-form" novalidate>
+                    <label for="amount" class="field-label">Amount</label>
+
+                    <div class="amount-field">
+                        <span class="currency-sign" aria-hidden="true">₱</span>
+                        <input type="text" id="amount" inputmode="decimal" placeholder="0.00" autocomplete="off">
+                        <span class="currency-code">PHP</span>
+                    </div>
+
+                    <p class="tx-message" id="tx-message" role="alert" hidden></p>
+
+                    <div class="quick-amounts" role="group" aria-label="Quick amounts">
+                        <button type="button" data-amount="50">₱50</button>
+                        <button type="button" data-amount="100">₱100</button>
+                        <button type="button" data-amount="200">₱200</button>
+                    </div>
+
+                    <button type="submit" class="btn-amber">
+                        <span id="tx-submit-label">Deposit funds</span>
+                         <svg aria-hidden="true" stroke-width="2"><use href="#icon-chevron-right"></use></svg>
+                    </button>
+                </form>
+
+                <div class="limits-note">
+                     <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-info"></use></svg>
+                    <div>
+                        <p><strong>Withdrawal limits: ₱25,000 per transaction • ₱50,000 daily</strong></p>
+                        <p id="limits-today">Withdrawn today: ₱0.00 • ₱50,000.00 remaining</p>
+                        <p id="overdraft-note">Checking includes up to ₱500 of overdraft protection.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    {% include 'atm/balance_modal.html' %}
+    {% include 'atm/history_modal.html' %}
+    {% include 'atm/receipt_modal.html' %}
+    {% include 'atm/footer.html' %}
+    <script src="{% static 'js/legal.js' %}" defer></script>
+    <script src="{% static 'js/dashboard.js' %}" defer></script>
+</body>
+</html>

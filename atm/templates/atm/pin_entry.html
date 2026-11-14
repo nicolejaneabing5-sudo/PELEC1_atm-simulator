@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC Bank | Login</title>
+    <link rel="icon" type="image/png" href="{% static 'images/bank_logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pin_style.css' %}">
+</head>
+<body class="pin-entry">
+     {% include 'atm/icons.html' %}
+    <main class="page">
+        <section class="hero">
+            <a href="/" class="logo">
+                <img src="{% static 'images/bank_logo.png' %}" alt="ABC Bank Logo">
+            </a>
+            <p class="eyebrow">ABC Secure Access</p>
+            <h1>Your money, <br>right at your fingertips.</h1>
+            <p class="hero-desc">Access your accounts, manage deposits, and make <br>withdrawals in one secure place.</p>
+
+            <ul class="features">
+                <li>
+                    <span class="icon icon--red" aria-hidden="true">
+                        <svg stroke-width="1.5"><use href="#icon-shield"></use></svg>
+                    </span>
+                    <div class="feature-text">
+                        <strong>Secure access</strong>
+                        <small>Protected session</small>
+                    </div>
+                </li>
+
+                <li>
+                    <span class="icon icon--orange" aria-hidden="true">
+                        <svg stroke-width="1.5"><use href="#icon-clock"></use></svg>
+                    </span>
+                    <div class="feature-text">
+                        <strong>Always available</strong>
+                        <small>Bank anytime</small>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+
+       <form class="login-card" id="pin-form" method="post" action="{% url 'atm:verify_pin' %}" data-attempts="{{ attempts_left }}" data-locked="{{ locked|yesno:'true,false' }}" aria-labelledby="pin-title" novalidate>
+        {% csrf_token %}
+            <header class="card-header">
+                <div>
+                    <p class="eyebrow">Welcome back</p>
+                    <h2 id="pin-title">Enter your PIN</h2>
+                </div>
+                <button type="button" class="lock-icon" id="lock-btn" data-url="{% url 'atm:unlock_pin' %}" aria-label="PIN lock status" disabled>
+                    <svg class="icon-closed" aria-hidden="true" stroke-width="1.5"><use href="#icon-lock-closed"></use></svg>
+                    <svg class="icon-open" aria-hidden="true" stroke-width="1.5"><use href="#icon-lock-open"></use></svg>
+                </button>
+            </header>
+
+            <p class="card-desc">Use the keypad or your keyboard to enter your 4-digit PIN.</p>
+
+            <div class="pin-field" id="pin-field">
+                <svg class="pin-lock" aria-hidden="true" stroke-width="1.5"><use href="#icon-lock-closed"></use></svg>
+                <div class="pin-dots" aria-hidden="true">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+
+                <input type="password" id="pin-input" class="pin-input" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="4-digit PIN">
+                
+                <span class="pin-count" id="pin-count">0/4</span>
+            </div>
+
+            <p class="pin-error" id="pin-error" role="alert" hidden>
+                 <svg aria-hidden="true" stroke-width="1.8"><use href="#icon-alert"></use></svg>
+                <span id="pin-error-text"></span>
+            </p>
+
+            <div class="pin-meta" id="pin-meta">
+                <p>Simulator PIN: <strong>1234</strong></p>
+                <p id="attempts" aria-live="polite">4 attempts left</p>
+            </div>
+
+            <div class="keypad" role="group" aria-label="PIN keypad">
+                <button type="button" class="key" data-key="1">1</button>
+                <button type="button" class="key" data-key="2">2</button>
+                <button type="button" class="key" data-key="3">3</button>
+                <button type="button" class="key" data-key="4">4</button>
+                <button type="button" class="key" data-key="5">5</button>
+                <button type="button" class="key" data-key="6">6</button>
+                <button type="button" class="key" data-key="7">7</button>
+                <button type="button" class="key" data-key="8">8</button>
+                <button type="button" class="key" data-key="9">9</button>
+                <button type="button" class="key key--text" data-key="clear">Clear</button>
+                <button type="button" class="key" data-key="0">0</button>
+                <button type="button" class="key key--text" data-key="back" aria-label="Delete last digit">
+                     <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-backspace"></use></svg>
+                </button>
+            </div>
+
+             <button type="submit" class="btn-primary" id="submit-btn">
+                <span id="submit-label">Access my accounts</span>
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
+
+            <p class="disclaimer">
+                This is a secure educational simulation.<br>Never share your real banking PIN.
+            </p>
+        </form>
+    </main>
+
+    {% include 'atm/footer.html' %}
+    <script src="{% static 'js/legal.js' %}" defer></script>
+    <script src="{% static 'js/pin.js' %}" defer></script> 
+</body>
+</html>
