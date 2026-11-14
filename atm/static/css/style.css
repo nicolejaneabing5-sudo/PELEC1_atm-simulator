@@ -15,14 +15,16 @@
     --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ---------- reset ---------- */
-*, *::before, *::after { box-sizing: border-box; }
+/* reset */
+*, *::before, *::after { 
+    box-sizing: border-box; 
+}
 
 body {
     margin: 0;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;     /* page on top, footer at the bottom */
+    flex-direction: column;     
     font-family: var(--font);
     color: var(--navy);
 }
@@ -59,7 +61,7 @@ button, input {
     white-space: nowrap;
 }
 
-/* ---------- shared widths ---------- */
+/* widths */
 .container, .page, .site-footer {
     width: 100%;
     max-width: 1200px;
@@ -67,7 +69,7 @@ button, input {
     padding-inline: 1.5rem;
 }
 
-/* ---------- small shared pieces ---------- */
+/* shared styling */
 .logo img { 
     display: block; 
     width: 200px; 
@@ -91,14 +93,14 @@ button, input {
     color: var(--slate); 
 }
 
-/* anything that is a centered icon box */
+/* centered icon box */
 .icon, .icon-tile, .lock-icon, .avatar, .round-link, .bell-btn, .receipt-icon, .legal-close {
     display: grid;
     place-items: center;
     flex-shrink: 0;
 }
 
-/* a bold title with a small muted line under it */
+/* bold title with muted line */
 .feature-text, .tx-text, .user-info, .balance-name { 
     display: grid; 
 }
@@ -108,7 +110,7 @@ button, input {
     color: var(--muted);
 }
 
-/* ---------- buttons ---------- */
+/* buttons */
 .btn-primary, .btn-amber {
     display: flex;
     align-items: center;
@@ -119,7 +121,9 @@ button, input {
     font-weight: 700;
     cursor: pointer;
 }
-.btn-primary svg, .btn-amber svg { width: 14px; height: 14px; }
+.btn-primary svg, .btn-amber svg { 
+    width: 14px; height: 14px; 
+}
 
 .btn-primary {
     height: 52px;
@@ -128,8 +132,14 @@ button, input {
     background: var(--navy);
     box-shadow: 0 10px 20px rgba(20, 30, 55, 0.25);
 }
-.btn-primary svg { color: var(--amber); }
-.btn-primary:disabled { background: #c3cddc; box-shadow: none; cursor: not-allowed; }
+.btn-primary svg { 
+    color: var(--amber); 
+}
+.btn-primary:disabled { 
+    background: #c3cddc; 
+    box-shadow: none; 
+    cursor: not-allowed; 
+}
 
 .btn-amber {
     height: 60px;
@@ -139,17 +149,37 @@ button, input {
     box-shadow: 0 10px 24px rgba(245, 158, 11, 0.35);
     transition: filter 0.15s;
 }
-.btn-amber:hover { filter: brightness(1.05); }
-.btn-amber:focus-visible { outline-color: #fff; outline-offset: 3px; }
+.btn-amber:hover { 
+    filter: brightness(1.05); 
+}
+.btn-amber:focus-visible { 
+    outline-color: #fff; 
+    outline-offset: 3px; 
+}
 
-/* ---------- footer ---------- */
-.site-footer { padding-block: 0 1.5rem; }
-.site-footer nav { padding-top: 1.25rem; }
-.site-footer ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.25rem; }
-.site-footer small, .site-footer a { font-size: 0.75rem; font-weight: 600; color: var(--muted); }
-.site-footer a:hover { color: var(--navy); }
+/* footer */
+.site-footer { 
+    padding-block: 0 1.5rem; 
+}
+.site-footer nav { 
+    padding-top: 1.25rem; 
+}
+.site-footer ul { 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 1.25rem; 
+}
+.site-footer small, .site-footer a { 
+    font-size: 0.75rem; 
+    font-weight: 600; 
+    color: var(--muted); 
+}
+.site-footer a:hover { 
+    color: var(--navy); 
+}
 
-/* ---------- modal shell (legal, balance, history, receipt) ---------- */
+/* modal */
 .legal-modal, .balance-modal, .history-modal, .receipt-modal {
     width: calc(100% - 2rem);
     max-width: 588px;
@@ -205,7 +235,7 @@ dialog::backdrop {
     background: var(--border); 
 }
 
-/* ---------- icon tiles (dashboard cards, balance popup, transaction rows) ---------- */
+/* icon tiles */
 .icon-tile { 
     width: 46px; height: 46px; border-radius: 14px; 
 }
@@ -225,7 +255,7 @@ dialog::backdrop {
     color: var(--green); 
 }
 
-/* ---------- transaction rows (dashboard list, history popup) ---------- */
+/* transaction */
 .tx { 
     display: flex; 
     align-items: center; 

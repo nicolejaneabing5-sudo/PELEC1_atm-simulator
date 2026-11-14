@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.http import require_POST
+from django.shortcuts import render, redirect
 
 from .oop.domain import ATMError
 from .oop import sample_accounts as bank
@@ -15,6 +16,9 @@ USER_NAME = "Nicole Jane Abing"
 
 '''def home(request):
     return HttpResponse("Welcome to PELEC1 ATM Simulator")'''
+    
+def peso(value):
+    return f"₱{value:,.2f}"
 
 def account_state(acc):
     """Everything the page shows for one account, already formatted as text."""
@@ -50,7 +54,7 @@ def pin_state(request):
 def pin_entry(request):
     return render(request, "atm/pin_entry.html", pin_state(request))
  
- 
+
 @require_POST
 def verify_pin(request):
     state = pin_state(request)

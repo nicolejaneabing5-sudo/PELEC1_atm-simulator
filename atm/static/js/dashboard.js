@@ -1,12 +1,6 @@
 'use strict';
 
-/* =========================================================
-   dashboard.js — interface behavior only.
-   Python (views.py + atm/oop/domain.py) owns every balance, limit and rule.
-   JS reads text from the page (data-* attributes) and writes back what Python returns.
-   ========================================================= */
-
-/* ---------- elements ---------- */
+/* elements */
 const $ = id => document.getElementById(id);
 const txForm      = $('tx-form');
 const amountInput = $('amount');
@@ -22,13 +16,13 @@ const selectedKey   = () => selectedRadio('account').value;
 const selectedType  = () => selectedRadio('tx-type').value;
 const selectedCard  = () => selectedRadio('account').closest('.account-card');
 
-/* ---------- greeting (name comes from Python via data-name) ---------- */
+/* greetings */
 const greeting = $('greeting-title');
 const hour = new Date().getHours();
 greeting.textContent =
     `Good ${hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening'}, ${greeting.dataset.name}`;
 
-/* ---------- right-hand panel follows the selected account / type ---------- */
+/* right panel */
 function renderPanel() {
     const card = selectedCard();
     document.querySelector('.new-tx h2').textContent = card.dataset.name;
@@ -42,7 +36,7 @@ document.querySelectorAll('input[name="account"], input[name="tx-type"]').forEac
     radio.addEventListener('change', () => { clearMessage(); renderPanel(); })
 );
 
-/* ---------- popups ---------- */
+/* modals */
 function openModal(id) {
     const modal = $(id);
     if (modal && !modal.open) modal.showModal();
@@ -51,7 +45,7 @@ function openModal(id) {
 $('balance-link').addEventListener('click', e => { e.preventDefault(); openModal('balance-modal'); });
 $('view-all-link').addEventListener('click', e => { e.preventDefault(); openModal('history-modal'); });
 
-// clicking the dark backdrop closes a popup (legal.js handles the legal one)
+
 document.addEventListener('click', e => {
     const modal = e.target;
     if (!(modal instanceof HTMLDialogElement) || modal.id === 'legal-modal') return;
@@ -61,7 +55,7 @@ document.addEventListener('click', e => {
     if (outside) modal.close();
 });
 
-/* ---------- receipt: filled from the clicked row's data-* attributes ---------- */
+/* receipt */
 function openReceipt(row) {
     const d = row.dataset;
     const isIn = d.kind === 'in';
@@ -78,7 +72,7 @@ function openReceipt(row) {
     openModal('receipt-modal');
 }
 
-// click, Enter or Space on a row opens its receipt (no server request needed)
+
 [txList, historyList].forEach(list => {
     const open = e => {
         const row = e.target.closest('.tx');
@@ -90,7 +84,9 @@ function openReceipt(row) {
     });
 });
 
-/* ---------- messages ---------- */
+document.querySelector('#print-receipt')?.addEventListener('click', () => window.print());
+
+/* messages */
 function showMessage(text, ok = false) {
     message.textContent = text;
     message.classList.toggle('is-ok', ok);
@@ -103,7 +99,7 @@ function clearMessage() {
     amountField.classList.remove('is-error');
 }
 
-/* ---------- amount input: digits and one dot, max 2 decimals ---------- */
+/* amount input */
 amountInput.addEventListener('input', () => {
     let v = amountInput.value.replace(/[^\d.]/g, '');
     const [whole, ...rest] = v.split('.');
@@ -120,7 +116,7 @@ document.querySelectorAll('.quick-amounts button').forEach(btn =>
     })
 );
 
-/* ---------- show what Python returned ---------- */
+/* returned data */
 function applyState(data) {
     for (const [key, acc] of Object.entries(data.accounts)) {
         document.querySelector(`[data-balance="${key}"]`).textContent   = acc.balance;
@@ -133,7 +129,6 @@ function applyState(data) {
     $('total-balance').textContent = data.total;
     $('balance-total').textContent = data.total;
 
-    // new row on top of both lists (HTML is rendered by Python); dashboard list stays short
     txList.insertAdjacentHTML('afterbegin', data.rows.recent);
     while (txList.children.length > Number(txList.dataset.max)) txList.lastElementChild.remove();
     historyList.insertAdjacentHTML('afterbegin', data.rows.history);
@@ -142,12 +137,12 @@ function applyState(data) {
     renderPanel();
 }
 
-/* ---------- submit: the only request this page makes ---------- */
+/* submit */
 txForm.addEventListener('submit', async e => {
     e.preventDefault();
     if (!parseFloat(amountInput.value)) return showMessage('Enter an amount.');
 
-    const body = new FormData(txForm);      // amount + csrf token
+    const body = new FormData(txForm);      
     body.append('account', selectedKey());
     body.append('type', selectedType());
 
@@ -167,5 +162,6 @@ txForm.addEventListener('submit', async e => {
         submitBtn.disabled = false;
     }
 });
+
 
 renderPanel();

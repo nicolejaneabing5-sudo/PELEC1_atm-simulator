@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{% static 'css/header_style.css' %}">
     <link rel="stylesheet" href="{% static 'css/footer_style.css' %}">
     <link rel="stylesheet" href="{% static 'css/dashboard_style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/popup_style.css' %}"
+    <link rel="stylesheet" href="{% static 'css/popup_style.css' %}">
 </head>
 
 <body class="dashboard">
@@ -18,7 +18,7 @@
 
     <header class="site-header">
         <div class="container header-inner">
-            <a href="/dashboard/" class="logo">
+            <a href="{% url 'atm:dashboard' %}" class="logo">
                 <img src="{% static 'images/bank_logo.png' %}" alt="ABC Bank Logo">
             </a>
 
@@ -27,7 +27,7 @@
                     <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-bell"></use></svg>
                 </button>
 
-                <a href="/" class="user-menu">
+                <a href="{% url 'atm:pin_entry' %}" class="user-menu">
                     <span class="avatar" aria-hidden="true">JD</span>
                     <span class="user-info">
                         <strong>Nicole Jane Abing</strong>

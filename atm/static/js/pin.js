@@ -1,14 +1,8 @@
 'use strict';
 
-/* =========================================================
-   pin.js — interface behavior only.
-   Python (views.py) checks the PIN, counts attempts and decides when to lock.
-   JS draws the dots, handles the keypad and shows whatever Python answers.
-   ========================================================= */
+const PIN_LENGTH = 4;   
 
-const PIN_LENGTH = 4;   // matches the 4 dots + maxlength in the HTML
-
-/* ---------- elements ---------- */
+/* Elements */
 const form        = document.getElementById('pin-form');
 const field       = document.getElementById('pin-field');
 const input       = document.getElementById('pin-input');
@@ -26,20 +20,20 @@ const submitLabel = document.getElementById('submit-label');
 
 const DEFAULT_DESC = cardDesc.textContent;
 
-/* ---------- state: starting values come from Python (survives a refresh) ---------- */
+/* State */
 let pin = '';
 let attempts = Number(form.dataset.attempts);
 let locked = form.dataset.locked === 'true';
 
-/* ---------- talking to Python ---------- */
+
 async function post(url, data = {}) {
-    const body = new FormData(form);   // includes the csrf token
+    const body = new FormData(form);   
     Object.entries(data).forEach(([key, value]) => body.append(key, value));
     const res = await fetch(url, { method: 'POST', body });
     return res.json();
 }
 
-/* ---------- display ---------- */
+/* DISPLAY */
 function render() {
     dots.forEach((dot, i) => {
         dot.classList.toggle('filled', i < pin.length);
@@ -68,7 +62,7 @@ function updateAttempts() {
     attemptsEl.textContent = `${attempts} attempt${attempts === 1 ? '' : 's'} left`;
 }
 
-/* ---------- locked / unlocked look (Python decides which one) ---------- */
+/* Lock / Unlock */
 function showLocked() {
     locked = true;
     pin = '';
@@ -111,7 +105,7 @@ function showUnlocked(attemptsLeft) {
     input.focus({ preventScroll: true });
 }
 
-/* ---------- input ---------- */
+/* PIN Input */
 function addDigit(d) {
     if (locked || pin.length >= PIN_LENGTH) return;
     clearError();
@@ -133,7 +127,7 @@ function clearPin() {
     render();
 }
 
-// on-screen keypad
+
 keys.forEach(key => {
     key.addEventListener('click', () => {
         const value = key.dataset.key;
@@ -143,7 +137,7 @@ keys.forEach(key => {
     });
 });
 
-// typing straight into the field (mainly phones)
+
 input.addEventListener('input', () => {
     if (locked) return;
     pin = input.value.replace(/\D/g, '').slice(0, PIN_LENGTH);
@@ -151,13 +145,13 @@ input.addEventListener('input', () => {
     render();
 });
 
-// physical keyboard
+
 document.addEventListener('keydown', e => {
     if (locked || document.querySelector('dialog[open]')) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
 
     if (e.key.length === 1 && e.key >= '0' && e.key <= '9') {
-        e.preventDefault();          // stops the input from also receiving it
+        e.preventDefault();          
         addDigit(e.key);
     } else if (e.key === 'Backspace') {
         e.preventDefault();
@@ -170,7 +164,7 @@ document.addEventListener('keydown', e => {
     }
 });
 
-/* ---------- red lock button: Python resets the attempts, JS redraws ---------- */
+/* Incorrect PIN */
 lockBtn.addEventListener('click', async () => {
     if (!locked) return;
     try {
@@ -181,7 +175,7 @@ lockBtn.addEventListener('click', async () => {
     }
 });
 
-/* ---------- submit: Python checks the PIN ---------- */
+/* Checks PIN */
 form.addEventListener('submit', async e => {
     e.preventDefault();
     if (locked) return;
@@ -207,12 +201,12 @@ form.addEventListener('submit', async e => {
     }
 });
 
-/* ---------- start ---------- */
+/* start */
 render();
 updateAttempts();
 if (locked) showLocked();
 
-// show the caret right away on desktop (skip on phones so the keyboard doesn't pop up)
+
 if (!locked && window.matchMedia('(pointer: fine)').matches) {
     input.focus({ preventScroll: true });
 }

@@ -14,7 +14,7 @@
         const link = e.target.closest("[data-legal]");
         if (!link) return;
 
-        e.preventDefault();   // stops the jump to the top
+        e.preventDefault();   
 
         const modal = document.getElementById("legal-modal");
         const title = document.getElementById("legal-title");
@@ -31,7 +31,7 @@
         modal.showModal();
     });
 
-    // clicking the dark backdrop closes the modal
+    
     document.addEventListener("click", e => {
         const modal = document.getElementById("legal-modal");
         if (modal && e.target === modal) modal.close();
