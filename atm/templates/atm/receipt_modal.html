@@ -1,0 +1,61 @@
+{% load static %}
+<dialog class="receipt-modal" id="receipt-modal" aria-labelledby="receipt-title">
+    <form method="dialog">
+        <button class="legal-close" aria-label="Close receipt">
+            <svg aria-hidden="true" stroke-width="1.8"><use href="#icon-close"></use></svg>
+        </button>
+    </form>
+
+    <article class="receipt">
+        <header class="receipt-top">
+            <img class="receipt-logo" src="{% static 'images/bank_logo.png' %}" alt="ABC Bank Logo">
+            <p class="receipt-shop">ATM Simulator</p>
+        </header>
+
+        <div class="receipt-hero">
+            <span class="receipt-icon receipt-icon--in" id="receipt-icon" aria-hidden="true">
+                <svg stroke-width="1.5"><use id="receipt-icon-use" href="#icon-arrow-down-left"></use></svg>
+            </span>
+            <h2 class="receipt-status" id="receipt-title">Transaction successful</h2>
+            <p class="receipt-amount" id="receipt-amount">₱0.00</p>
+            <p class="receipt-type" id="receipt-type">Deposit</p>
+        </div>
+
+        <dl class="receipt-rows">
+            <div class="receipt-row">
+                <dt>Account</dt>
+                <dd id="receipt-account">—</dd>
+            </div>
+            <div class="receipt-row">
+                <dt>Description</dt>
+                <dd id="receipt-description">—</dd>
+            </div>
+            <div class="receipt-row">
+                <dt>Date</dt>
+                <dd id="receipt-date">—</dd>
+            </div>
+            <div class="receipt-row">
+                <dt>Reference</dt>
+                <dd class="receipt-ref" id="receipt-ref">—</dd>
+            </div>
+            <div class="receipt-row receipt-total">
+                <dt>Balance after</dt>
+                <dd id="receipt-balance">₱0.00</dd>
+            </div>
+            <div class="print-row">
+                <button id="print-receipt" type="button">
+                    <svg aria-hidden="true" stroke-width="1.6"><use href="#icon-printer"></use></svg>
+                    Print receipt
+                </button>
+            </div>
+        </dl>
+
+        <div class="receipt-barcode" aria-hidden="true"></div>
+
+        <p class="receipt-note">
+            This receipt confirms your simulated transaction.<br>
+            Please retain it for your records.
+        </p>
+        <p class="receipt-thanks">*** Thank you for banking with ABC ***</p>
+    </article>
+</dialog>
