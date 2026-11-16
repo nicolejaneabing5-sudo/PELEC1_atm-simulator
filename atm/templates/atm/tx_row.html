@@ -1,0 +1,20 @@
+<li class="tx" role="button" tabindex="0"
+    data-title="{{ row.title }}" data-date="{{ row.date }}" data-ref="{{ row.ref }}"
+    data-account="{{ row.account }} •••• {{ row.last4 }}" data-type="{{ row.type }}"
+    data-signed="{{ row.signed }}" data-after="{{ row.after }}" data-kind="{{ row.kind }}">
+
+  <span class="icon-tile icon-tile--{% if row.kind == 'in' %}green{% else %}red{% endif %}" aria-hidden="true">
+    <svg stroke-width="1.5"><use href="#icon-{% if row.kind == 'in' %}arrow-down-left{% else %}arrow-up-right{% endif %}"></use></svg>
+  </span>
+
+  <div class="tx-text">
+    <strong>{{ row.title }}</strong>
+    <small>{{ row.date }} • {% if full %}{{ row.account }} •••• {{ row.last4 }}{% else %}{{ row.short }}{% endif %}</small>
+  </div>
+
+  <span class="tx-end">
+    <span class="tx-amount tx-amount--{{ row.kind }}">{{ row.signed }}</span>
+    {% if full %}<small class="tx-link">View receipt</small>{% endif %}
+  </span>
+  
+</li>
