@@ -5,12 +5,6 @@ from atm.oop.domain import CheckingAccount, SavingsAccount
 checking_account = CheckingAccount("4821", 8240.50)
 savings_account = SavingsAccount("9017", 12860.22)
 
-# seed transaction history
-checking_account.deposit(2450.00)
-checking_account.withdraw(100.00)
-savings_account.deposit(750.00)
-checking_account.deposit(480.00)
-
 accounts = {
     "checking": checking_account,
     "savings": savings_account

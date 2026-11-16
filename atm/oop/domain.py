@@ -1,4 +1,3 @@
-
 from datetime import datetime  # to import built-in date and time
 import random  # to import random numbers for reference number
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
