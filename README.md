@@ -29,8 +29,6 @@ Make sure your virtual environment (venv) is active, then run:
 pip install django
 
 4. Initialize the Database (not necessary)
-Run the initial migrations to set up your local database:
-
 python manage.py makemigrations
 python manage.py migrate
 

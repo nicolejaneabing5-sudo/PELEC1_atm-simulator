@@ -30,7 +30,11 @@ class Account:
     def __init__(self, account_number, balance, account_type):
         self.account_number = account_number
         self._balance = money(balance)
+
         self.account_type = account_type  # stores the account type
+
+        self.account_type = account_type # stores the account type (Savings or Checkings)
+
         if self._balance < 0:
             raise ATMError('Initial balance cannot be negative.')
 
@@ -41,6 +45,12 @@ class Account:
     def balance(self):
         """Controlled read access to the balance."""
         return self._balance
+
+
+    # check account balance
+    def check_balance(self):
+        return self._balance
+
 
     @property
     def withdrawn_today(self):
@@ -102,7 +112,7 @@ class SavingsAccount(Account):
         self.max_transaction = money(max_transaction)
         self.daily_max = money(daily_max)
         self.min_remain_balance = money(min_remain_balance)
-
+        
     def withdraw(self, amount):
         amt = self.validate_amount(amount)
 
@@ -127,20 +137,19 @@ class SavingsAccount(Account):
                 f'Savings account must maintain a minimum balance '
                 f'of ₱{self.min_remain_balance}.'
             )
-
+        # update balance
         new_balance = self._balance - amt
 
         if new_balance < 0:
             raise ATMError(
                 'Operation results in an invalid balance.'
             )
-
+        
         self._balance = money(new_balance)
         self._daily_withdraw += amt
-
-        transaction = Transaction(
-            datetime.now(), 'WITHDRAWAL (Saving)', amt, None
-        )
+        
+        transaction  = Transaction(datetime.now(), 'WITHDRAWAL (Saving)', amt, None)
+        
         self.transaction_history.append(transaction)
 
         return transaction
@@ -186,7 +195,7 @@ class CheckingAccount(Account):
 
         if amt > max_allowed:
             raise ATMError('Overdraft limit exceeded.')
-
+        # upadate new balance
         new_balance = self._balance - amt
 
         if new_balance < -self.overdraft_protection:
@@ -198,9 +207,8 @@ class CheckingAccount(Account):
         self._balance = money(new_balance)
         self._daily_withdraw += amt
 
-        transaction = Transaction(
-            datetime.now(), 'WITHDRAWAL (Checking)', amt, None
-        )
-        self.transaction_history.append(transaction)
+        transaction  = Transaction(datetime.now(), 'WITHDRAWAL (Checking)', amt, None)
 
+        self.transaction_history.append(transaction)
+        
         return transaction

@@ -8,11 +8,17 @@ from django.shortcuts import render, redirect
 
 from .oop.domain import ATMError
 from .oop import sample_accounts as bank
+from .oop.atm_service import ATMService
 
 CORRECT_PIN = "1234"
 MAX_ATTEMPTS = 4
 RECENT_COUNT = 5
 USER_NAME = "Nicole Jane Abing"
+
+def get_atm_service():
+    service = ATMService(bank.accounts, pin=CORRECT_PIN)
+    service.authenticate(CORRECT_PIN)
+    return service
 
 '''def home(request):
     return HttpResponse("Welcome to PELEC1 ATM Simulator")'''
@@ -110,6 +116,13 @@ def dashboard(request):
  
 @require_POST
 def transact(request):
+    if not request.session.get("authenticated"):
+        return JsonResponse(
+            {"ok": False, "message": "Please log in first."},
+            status=401
+        )
+
+    key, kind = request.POST.get("account"), request.POST.get("type")
     key, kind = request.POST.get("account"), request.POST.get("type")
     acc = bank.accounts.get(key)
     if acc is None or kind not in ("deposit", "withdrawal"):
@@ -117,7 +130,11 @@ def transact(request):
  
     try:
         amount = request.POST.get("amount")
-        tx = acc.deposit(amount) if kind == "deposit" else acc.withdraw(amount)
+        service = get_atm_service()
+        if kind == "deposit":
+            tx = service.deposit(key, amount)
+        else:
+             tx = service.withdrawal(key, amount)
     except ATMError as error:
         return JsonResponse({"ok": False, "message": str(error)}, status=400)
  

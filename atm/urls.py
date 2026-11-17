@@ -6,5 +6,6 @@ urlpatterns = [
     path("verify-pin/", views.verify_pin, name="verify_pin"),
     path("unlock-pin/", views.unlock_pin, name="unlock_pin"),
     path("dashboard/", views.dashboard, name="dashboard"),
+    path("dashboard/transaction/", views.transact, name="transact"),
     path("transact/", views.transact, name="transact"),
 ]

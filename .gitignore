@@ -1,0 +1,10 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Django local database
+db.sqlite3
+
+# Virtual environments
+venv/
+.venv/

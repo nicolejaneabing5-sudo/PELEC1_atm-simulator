@@ -151,12 +151,17 @@
                     </label>
                 </div>
 
-                <form id="tx-form" novalidate>
+                <form id="tx-form"
+                    action="{% url 'atm:transact' %}"
+                    method="POST"
+                    novalidate>
+
+                    {% csrf_token %}
                     <label for="amount" class="field-label">Amount</label>
 
                     <div class="amount-field">
                         <span class="currency-sign" aria-hidden="true">₱</span>
-                        <input type="text" id="amount" inputmode="decimal" placeholder="0.00" autocomplete="off">
+                        <input type="text" id="amount" name="amount" inputmode="decimal" placeholder="0.00" autocomplete="off">
                         <span class="currency-code">PHP</span>
                     </div>
 
