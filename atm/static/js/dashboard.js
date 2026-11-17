@@ -19,12 +19,15 @@ const selectedCard  = () => selectedRadio('account').closest('.account-card');
 /* greetings */
 const greeting = $('greeting-title');
 const hour = new Date().getHours();
-greeting.textContent =
-    `Good ${hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening'}, ${greeting.dataset.name}`;
+if (greeting) {
+    greeting.textContent =
+        `Good ${hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening'}, ${greeting.dataset.name}`;
+}
 
 /* right panel */
 function renderPanel() {
     const card = selectedCard();
+    if (!card) return;
     document.querySelector('.new-tx h2').textContent = card.dataset.name;
     document.querySelector('.chip').textContent = `•••• ${card.dataset.last4}`;
     submitLabel.textContent = selectedType() === 'deposit' ? 'Deposit funds' : 'Withdraw funds';
@@ -74,6 +77,7 @@ function openReceipt(row) {
 
 
 [txList, historyList].forEach(list => {
+    if (!list) return;
     const open = e => {
         const row = e.target.closest('.tx');
         if (row) openReceipt(row);
@@ -162,6 +166,5 @@ txForm.addEventListener('submit', async e => {
         submitBtn.disabled = false;
     }
 });
-
 
 renderPanel();

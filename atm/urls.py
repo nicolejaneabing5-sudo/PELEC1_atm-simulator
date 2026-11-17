@@ -7,4 +7,6 @@ urlpatterns = [
     path("unlock-pin/", views.unlock_pin, name="unlock_pin"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("transact/", views.transact, name="transact"),
+    path("dashboard/transacition/", views.transact, name="transact"),
+
 ]

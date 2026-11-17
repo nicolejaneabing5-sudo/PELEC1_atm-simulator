@@ -62,7 +62,7 @@
         <fieldset class="accounts">
             <legend class="visually-hidden">Choose an account</legend>
 
-            <label class="account-card">
+            <label class="account-card" data-name="Checking Account" data-last4="4821" data-limits="Withdrawn today: ₱0.00 • ₱50,000.00 remaining" data-overdraft="true">
                 <input type="radio" name="account" value="checking" class="visually-hidden" checked>
                 <span class="radio-mark" aria-hidden="true"></span>
 
@@ -86,7 +86,7 @@
                 <span class="meter"><span data-meter="checking" style="width: 0%"></span></span>
             </label>
 
-            <label class="account-card">
+            <label class="account-card" data-name="Savings Account" data-last4="9017" data-limits="Withdrawn today: ₱0.00 • ₱50,000.00 remaining" data-overdraft="false">
                 <input type="radio" name="account" value="savings" class="visually-hidden">
                 <span class="radio-mark" aria-hidden="true"></span>
 
@@ -151,13 +151,14 @@
                     </label>
                 </div>
 
-                <form id="tx-form" novalidate>
-                    <label for="amount" class="field-label">Amount</label>
+                <form id="tx-form" action="{% url 'atm:transact' %}" method="POST" novalidate>
+                {% csrf_token %}
+                <label for="amount" class="field-label">Amount</label>
 
-                    <div class="amount-field">
+
+                <div class="amount-field">
                         <span class="currency-sign" aria-hidden="true">₱</span>
-                        <input type="text" id="amount" inputmode="decimal" placeholder="0.00" autocomplete="off">
-                        <span class="currency-code">PHP</span>
+                        <input type="text" id="amount" name="amount" inputmode="decimal" placeholder="0.00" autocomplete="off">                        <span class="currency-code">PHP</span>
                     </div>
 
                     <p class="tx-message" id="tx-message" role="alert" hidden></p>
