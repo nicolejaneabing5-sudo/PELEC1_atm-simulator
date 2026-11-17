@@ -1,6 +1,6 @@
 from decimal import Decimal
 from atm.oop.domain import CheckingAccount, SavingsAccount
-
+ 
 # instantiate accounts
 checking_account = CheckingAccount("4821", 8240.50)
 savings_account = SavingsAccount("9017", 12860.22)
@@ -77,8 +77,6 @@ def get_payload():
     return {
 
         "user": "Nicole Jane Abing",
-
-        "user": "Jordan Davis",
 
         "accounts": {
             "checking": {

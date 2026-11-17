@@ -1,4 +1,3 @@
-
 from datetime import datetime  # to import built-in date and time
 import random  # to import random numbers for reference number
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
@@ -32,8 +31,6 @@ class Account:
         self._balance = money(balance)
 
         self.account_type = account_type  # stores the account type
-
-        self.account_type = account_type # stores the account type (Savings or Checkings)
 
         if self._balance < 0:
             raise ATMError('Initial balance cannot be negative.')

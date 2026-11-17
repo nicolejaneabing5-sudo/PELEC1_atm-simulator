@@ -77,11 +77,11 @@
                 </span>
 
                 <span class="balance-label">Available balance</span>
-                <span class="balance" data-balance="checking">₱8,240.50</span>
+                <span class="balance" data-balance="checking">{{ accounts.checking.balance }}</span>
 
                 <span class="limit">
                     <span>Withdrawn today</span>
-                    <span><b data-withdrawn="checking">₱0.00</b> / ₱50,000</span>
+                    <span><b data-withdrawn="checking">{{ accounts.checking.withdrawn }}</b> / ₱50,000</span>
                 </span>
                 <span class="meter"><span data-meter="checking" style="width: 0%"></span></span>
             </label>
@@ -101,11 +101,11 @@
                 </span>
 
                 <span class="balance-label">Available balance</span>
-                <span class="balance" data-balance="savings">₱12,860.22</span>
+                <span class="balance" data-balance="savings">{{ accounts.savings.balance }}</span>
 
                 <span class="limit">
                     <span>Withdrawn today</span>
-                    <span><b data-withdrawn="savings">₱0.00</b> / ₱50,000</span>
+                    <span><b data-withdrawn="savings">{{ accounts.savings.withdrawn }}</b> / ₱50,000</span>
                 </span>
                 <span class="meter"><span data-meter="savings" style="width: 0%"></span></span>
             </label>

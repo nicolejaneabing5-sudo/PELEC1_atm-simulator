@@ -1,6 +1,3 @@
-
-from atm.oop.domain import ATMError
-
 from atm.oop.domain import ATMError, Transaction
 
 
@@ -17,7 +14,6 @@ class ATMService:
 
         self.__max_attempts = 4
 
-        self.__max_attempts = 3
         self.__transaction_history = []
 
 

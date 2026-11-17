@@ -1,13 +1,14 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-from django.shortcuts import render, redirect
+
 
 from .oop.domain import ATMError
 from .oop import sample_accounts as bank
+
 from .oop.atm_service import ATMService
 
 CORRECT_PIN = "1234"
@@ -15,6 +16,8 @@ MAX_ATTEMPTS = 4
 RECENT_COUNT = 5
 USER_NAME = "Nicole Jane Abing"
 
+
+# initialize and authenticate the ATM service using the predefined bank accounts
 def get_atm_service():
     service = ATMService(bank.accounts, pin=CORRECT_PIN)
     service.authenticate(CORRECT_PIN)
@@ -97,10 +100,19 @@ def unlock_pin(request):
  
 # ---------- dashboard ----------
 def dashboard(request):
+    # Check if the user is authenticated
     if not request.session.get("authenticated"):
         return redirect("atm:pin_entry")
- 
+    
+    # Check account data when dashboard loads
+    for key, acc in bank.accounts.items():
+        print("DASHBOARD LOAD:", key, acc.withdrawn_today)
+
+    print("TRANSACTION HISTORY:", len(bank.history))
+    
+    # Get the user's name information
     parts = USER_NAME.split()
+    # Pass account details and transaction history to the dashboard
     return render(request, "atm/dashboard.html", {
         "user_name": USER_NAME,
         "first_name": parts[0],
@@ -123,7 +135,7 @@ def transact(request):
         )
 
     key, kind = request.POST.get("account"), request.POST.get("type")
-    key, kind = request.POST.get("account"), request.POST.get("type")
+
     acc = bank.accounts.get(key)
     if acc is None or kind not in ("deposit", "withdrawal"):
         return JsonResponse({"ok": False, "message": "Invalid request."}, status=400)
@@ -134,7 +146,8 @@ def transact(request):
         if kind == "deposit":
             tx = service.deposit(key, amount)
         else:
-             tx = service.withdrawal(key, amount)
+            tx = service.withdrawal(key, amount)
+        print("AFTER TRANSACTION:", key, acc.withdrawn_today)
     except ATMError as error:
         return JsonResponse({"ok": False, "message": str(error)}, status=400)
  
