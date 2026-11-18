@@ -1,0 +1,40 @@
+{
+    "user": {
+        "full_name": "Nicole Jane Abing",
+        "pin": "1234"
+    },
+    "accounts": {
+        "checking": {
+            "account_number": "4821",
+            "balance": 8240.50,
+            "account_type": "Checking Account",
+            "max_transaction": 25000.00,
+            "daily_max": 50000.00,
+            "overdraft_protection": 500.00,
+            "daily_withdraw": 0.00
+        },
+        "savings": {
+            "account_number": "9017",
+            "balance": 12860.22,
+            "account_type": "Savings Account",
+            "max_transaction": 10000.00,
+            "daily_max": 50000.00,
+            "min_remain_balance": 500.00,
+            "daily_withdraw": 0.00
+        }
+    },
+    "history": [
+        {
+            "title": "Payroll deposit",
+            "date": "Apr 24, 2025",
+            "ref": "ABC-245001",
+            "account": "Checking Account",
+            "short": "Checking",
+            "last4": "4821",        //  kani if na track na daan kung checking ba siya
+            "kind": "in",           // para asa ni
+            "type": "Deposit",
+            "signed": 2450.00,      // kani
+            "after": 8240.00        // kani
+        }
+    ]
+}
