@@ -1,10 +1,10 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from decimal import Decimal, InvalidOperation
+
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-from django.shortcuts import render, redirect
 
 from .oop.domain import ATMError
 from .oop import sample_accounts as bank
@@ -14,11 +14,21 @@ MAX_ATTEMPTS = 4
 RECENT_COUNT = 5
 USER_NAME = "Nicole Jane Abing"
 
-'''def home(request):
-    return HttpResponse("Welcome to PELEC1 ATM Simulator")'''
-    
+
+LOW_BALANCE = Decimal("1000.00")   # warn when balance is at or below this
+
+
+def low_balance_alert(acc):
+    if acc.balance <= LOW_BALANCE:
+        return (
+            f"Low Balance Warning: {acc.account_type} (•••• {acc.account_number}) "
+            f"is down to {peso(acc.balance)}. Consider making a deposit."
+        )
+    return None
+
 def peso(value):
     return f"₱{value:,.2f}"
+
 
 def account_state(acc):
     """Everything the page shows for one account, already formatted as text."""
@@ -32,28 +42,28 @@ def account_state(acc):
         "meter": float(acc.withdrawn_today / acc.daily_max * 100),
         "limits": f"Withdrawn today: {peso(acc.withdrawn_today)} • {peso(remaining)} remaining",
     }
- 
- 
+
+
 def total_balance():
     return peso(sum(a.balance for a in bank.accounts.values()))
- 
- 
+
+
 def history_label():
     n = len(bank.history)
     return f"{n} transaction{'' if n == 1 else 's'} across checking and savings"
- 
- 
+
+
 # ---------- PIN page ----------
 def pin_state(request):
     return {
         "attempts_left": request.session.get("attempts_left", MAX_ATTEMPTS),
         "locked": request.session.get("pin_locked", False),
     }
- 
- 
+
+
 def pin_entry(request):
     return render(request, "atm/pin_entry.html", pin_state(request))
- 
+
 
 @require_POST
 def verify_pin(request):
@@ -62,12 +72,12 @@ def verify_pin(request):
         return JsonResponse(
             {"ok": False, "locked": True, "attempts_left": 0, "message": "PIN locked."}, status=403
         )
- 
+
     if request.POST.get("pin") == CORRECT_PIN:
         request.session["attempts_left"] = MAX_ATTEMPTS
         request.session["authenticated"] = True
         return JsonResponse({"ok": True, "redirect": reverse("atm:dashboard")})
- 
+
     left = state["attempts_left"] - 1
     request.session["attempts_left"] = left
     request.session["pin_locked"] = left <= 0
@@ -80,20 +90,20 @@ def verify_pin(request):
         },
         status=400,
     )
- 
- 
+
+
 @require_POST
 def unlock_pin(request):
     request.session["attempts_left"] = MAX_ATTEMPTS
     request.session["pin_locked"] = False
     return JsonResponse({"ok": True, "attempts_left": MAX_ATTEMPTS})
- 
- 
+
+
 # ---------- dashboard ----------
 def dashboard(request):
     if not request.session.get("authenticated"):
         return redirect("atm:pin_entry")
- 
+
     parts = USER_NAME.split()
     return render(request, "atm/dashboard.html", {
         "user_name": USER_NAME,
@@ -106,21 +116,40 @@ def dashboard(request):
         "history": bank.history,
         "history_count": history_label(),
     })
- 
- 
+
+
 @require_POST
 def transact(request):
     key, kind = request.POST.get("account"), request.POST.get("type")
     acc = bank.accounts.get(key)
     if acc is None or kind not in ("deposit", "withdrawal"):
         return JsonResponse({"ok": False, "message": "Invalid request."}, status=400)
- 
+
+    amount = request.POST.get("amount")
+
+    # Insufficient funds check: runs BEFORE the account's own rules
+    # (minimum balance, daily limit, etc.) so this message wins when the
+    # amount is simply bigger than the balance.
+    if kind == "withdrawal":
+        try:
+            requested = Decimal(str(amount))
+        except (InvalidOperation, TypeError):
+            requested = None  # let acc.withdraw() report the invalid amount
+
+        if requested is not None and requested > Decimal(str(acc.balance)):
+            return JsonResponse(
+                {
+                    "ok": False,
+                    "message": "Insufficient funds. The amount is higher than your available balance.",
+                },
+                status=400,
+            )
+
     try:
-        amount = request.POST.get("amount")
         tx = acc.deposit(amount) if kind == "deposit" else acc.withdraw(amount)
     except ATMError as error:
         return JsonResponse({"ok": False, "message": str(error)}, status=400)
- 
+
     is_in = kind == "deposit"
     row = {
         "title": "Cash deposit" if is_in else "ATM withdrawal",
@@ -135,10 +164,11 @@ def transact(request):
         "after": peso(acc.balance),
     }
     bank.history.insert(0, row)
- 
+
     return JsonResponse({
         "ok": True,
         "message": f"{'Deposited' if is_in else 'Withdrew'} {peso(tx.amount)} successfully.",
+        "alert": low_balance_alert(acc), 
         "accounts": {k: account_state(a) for k, a in bank.accounts.items()},
         "total": total_balance(),
         "rows": {

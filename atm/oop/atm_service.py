@@ -11,7 +11,7 @@ class ATMService:
         self.__pin = str(pin)
         self.__session_active = False
         self.__failed_attempts = 0
-        self.__max_attempts = 4
+        self.__max_attempts = 3  # CHANGED: was 4, but the message said "three"
         
     # login
     def authenticate(self, pin):
@@ -30,8 +30,10 @@ class ATMService:
             if remaining == 0:
                 raise ATMError("PIN locked after three incorrect attempts.")
 
+            # CHANGED: "1 attempt" vs "2 attempts"
             raise ATMError(
-                f"Incorrect PIN. {remaining} attempts remaining."
+                f"Incorrect PIN. {remaining} "
+                f"attempt{'s' if remaining != 1 else ''} remaining."
             )
 
         self.__session_active = True
