@@ -2,7 +2,7 @@ from decimal import Decimal, InvalidOperation
 
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from django.template.loader import render_to_string
+from django.template import loader
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
@@ -172,8 +172,8 @@ def transact(request):
         "accounts": {k: account_state(a) for k, a in bank.accounts.items()},
         "total": total_balance(),
         "rows": {
-            "recent": render_to_string("atm/tx_row.html", {"row": row, "full": False}),
-            "history": render_to_string("atm/tx_row.html", {"row": row, "full": True}),
+            "recent": loader.render_to_string("atm/tx_row.html", {"row": row, "full": False}),
+            "history": loader.render_to_string("atm/tx_row.html", {"row": row, "full": True}),
         },
         "history_count": history_label(),
     })
