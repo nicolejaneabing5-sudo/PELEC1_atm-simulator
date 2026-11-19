@@ -3,146 +3,40 @@
     "full_name": "Nicole Jane Abing",
     "pin": "1234"
   },
+
   "accounts": {
     "checking": {
       "account_number": "4821",
-      "balance": 9390.5,
+      "balance": 8240.50,
       "limits": {
-        "max_transaction": 25000.0,
-        "daily_max": 50000.0,
-        "overdraft_protection": 500.0
+        "max_transaction": 25000.00,
+        "daily_max": 50000.00,
+        "overdraft_protection": 500.00
       }
     },
     "savings": {
       "account_number": "9017",
       "balance": 12860.22,
       "limits": {
-        "max_transaction": 10000.0,
-        "daily_max": 50000.0,
-        "min_remain_balance": 500.0
+        "max_transaction": 10000.00,
+        "daily_max": 50000.00,
+        "min_remain_balance": 500.00
       }
     }
   },
+
   "transactions": [
-    {
-      "title": "Cash deposit",
-      "date": "Nov 19, 2026",
-      "account": "checking",
-      "type": "deposit",
-      "amount": 1000.0,
-      "reference": "ABC-4B4956CF"
-    },
-    {
-      "title": "Cash deposit",
-      "date": "Nov 19, 2026",
-      "account": "checking",
-      "type": "deposit",
-      "amount": 100.0,
-      "reference": "ABC-DA20FB55"
-    },
-    {
-      "title": "Cash deposit",
-      "date": "Nov 19, 2026",
-      "account": "checking",
-      "type": "deposit",
-      "amount": 50.0,
-      "reference": "ABC-D5CC3DAB"
-    },
-    {
-      "title": "Payroll deposit",
-      "date": "Apr 24, 2025",
-      "account": "checking",
-      "type": "deposit",
-      "amount": 2450.0,
-      "reference": "ABC-04242450"
-    },
-    {
-      "title": "ATM withdrawal",
-      "date": "Apr 22, 2025",
-      "account": "checking",
-      "type": "withdrawal",
-      "amount": 100.0,
-      "reference": "ABC-04220100"
-    },
-    {
-      "title": "Monthly savings",
-      "date": "Apr 21, 2025",
-      "account": "savings",
-      "type": "deposit",
-      "amount": 750.0,
-      "reference": "ABC-04210750"
-    },
-    {
-      "title": "Cash deposit",
-      "date": "Apr 18, 2025",
-      "account": "checking",
-      "type": "deposit",
-      "amount": 480.0,
-      "reference": "ABC-04180480"
-    },
-    {
-      "title": "ATM withdrawal",
-      "date": "Apr 15, 2025",
-      "account": "checking",
-      "type": "withdrawal",
-      "amount": 125.0,
-      "reference": "ABC-04150125"
-    },
-    {
-      "title": "Payroll deposit",
-      "date": "Apr 10, 2025",
-      "account": "checking",
-      "type": "deposit",
-      "amount": 2450.0,
-      "reference": "ABC-04102450"
-    },
-    {
-      "title": "ATM withdrawal",
-      "date": "Apr 8, 2025",
-      "account": "savings",
-      "type": "withdrawal",
-      "amount": 200.0,
-      "reference": "ABC-04080200"
-    },
-    {
-      "title": "Cash deposit",
-      "date": "Apr 3, 2025",
-      "account": "savings",
-      "type": "deposit",
-      "amount": 150.0,
-      "reference": "ABC-04030150"
-    },
-    {
-      "title": "Payroll deposit",
-      "date": "Mar 27, 2025",
-      "account": "checking",
-      "type": "deposit",
-      "amount": 2450.0,
-      "reference": "ABC-03272450"
-    },
-    {
-      "title": "ATM withdrawal",
-      "date": "Mar 24, 2025",
-      "account": "checking",
-      "type": "withdrawal",
-      "amount": 80.0,
-      "reference": "ABC-03240080"
-    },
-    {
-      "title": "Monthly savings",
-      "date": "Mar 21, 2025",
-      "account": "savings",
-      "type": "deposit",
-      "amount": 750.0,
-      "reference": "ABC-03210750"
-    },
-    {
-      "title": "Savings deposit",
-      "date": "Mar 13, 2025",
-      "account": "savings",
-      "type": "deposit",
-      "amount": 500.0,
-      "reference": "ABC-03130500"
-    }
+    { "title": "Payroll deposit",  "date": "Apr 24, 2025", "account": "checking", "type": "deposit",    "amount": 2450.00, "reference": "ABC-04242450" },
+    { "title": "ATM withdrawal",   "date": "Apr 22, 2025", "account": "checking", "type": "withdrawal", "amount": 100.00,  "reference": "ABC-04220100" },
+    { "title": "Monthly savings",  "date": "Apr 21, 2025", "account": "savings",  "type": "deposit",    "amount": 750.00,  "reference": "ABC-04210750" },
+    { "title": "Cash deposit",     "date": "Apr 18, 2025", "account": "checking", "type": "deposit",    "amount": 480.00,  "reference": "ABC-04180480" },
+    { "title": "ATM withdrawal",   "date": "Apr 15, 2025", "account": "checking", "type": "withdrawal", "amount": 125.00,  "reference": "ABC-04150125" },
+    { "title": "Payroll deposit",  "date": "Apr 10, 2025", "account": "checking", "type": "deposit",    "amount": 2450.00, "reference": "ABC-04102450" },
+    { "title": "ATM withdrawal",   "date": "Apr 8, 2025",  "account": "savings",  "type": "withdrawal", "amount": 200.00,  "reference": "ABC-04080200" },
+    { "title": "Cash deposit",     "date": "Apr 3, 2025",  "account": "savings",  "type": "deposit",    "amount": 150.00,  "reference": "ABC-04030150" },
+    { "title": "Payroll deposit",  "date": "Mar 27, 2025", "account": "checking", "type": "deposit",    "amount": 2450.00, "reference": "ABC-03272450" },
+    { "title": "ATM withdrawal",   "date": "Mar 24, 2025", "account": "checking", "type": "withdrawal", "amount": 80.00,   "reference": "ABC-03240080" },
+    { "title": "Monthly savings",  "date": "Mar 21, 2025", "account": "savings",  "type": "deposit",    "amount": 750.00,  "reference": "ABC-03210750" },
+    { "title": "Savings deposit",  "date": "Mar 13, 2025", "account": "savings",  "type": "deposit",    "amount": 500.00,  "reference": "ABC-03130500" }
   ]
 }

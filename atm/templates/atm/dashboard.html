@@ -27,18 +27,71 @@
                 <div class="header-notification-container">
                     <button type="button" class="bell-btn" id="notificationBell" aria-label="Notifications" aria-expanded="false">
                         <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-bell"></use></svg>
-                        <span class="notification-badge" id="notifBadge" style="display: none;">0</span>
+                        <span class="notification-badge" id="notifBadge">2</span>
                     </button>
 
                     <div class="notification-backdrop" id="notifBackdrop"></div>
 
                     <div class="notification-dropdown" id="notificationDropdown" role="dialog" aria-label="Notifications" aria-hidden="true">
                         <div class="notification-header">
-                            <h3 id="notifHeaderTitle">Notifications (0)</h3>
+                            <h3 id="notifHeaderTitle">Notifications (2)</h3>
                             <button type="button" class="notification-close" id="notifClose" aria-label="Close notifications">&times;</button>
                         </div>
 
-                        <div class="notification-list" id="notificationList"></div>
+                        <div class="notification-list" id="notificationList">
+                            <!-- Item 1: Opens Receipt Modal -->
+                            <div class="notification-item unread"
+                                data-action="receipt"
+                                data-kind="out"
+                                data-signed="-₱100.00"
+                                data-type="Withdrawal"
+                                data-account="Checking Account •••• 4821"
+                                data-title="ATM Cash Withdrawal"
+                                data-date="Nov 17, 2026 • 1:47 PM"
+                                data-ref="TXN-20261117-01"
+                                data-after="₱11,120.50">
+                                <div class="notification-icon success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+                                </div>
+                                <div class="notification-content">
+                                    <p class="notification-title">Transaction Alert: Withdrawal of ₱100.00 from Checking Account (•••• 4821) was successful.</p>
+                                    <p class="notification-meta">Nov 17, 2026 • 1:47 PM</p>
+                                </div>
+                                <div class="status-indicator unread-dot"></div>
+                            </div>
+
+                            <!-- Item 2: Opens Receipt Modal -->
+                            <div class="notification-item unread"
+                                data-action="receipt"
+                                data-kind="in"
+                                data-signed="+₱50.00"
+                                data-type="Deposit"
+                                data-account="Checking Account •••• 4821"
+                                data-title="Cash deposit"
+                                data-date="Nov 17, 2026 • 12:56 PM"
+                                data-ref="TXN-20261117-02"
+                                data-after="₱11,220.50">
+                                <div class="notification-icon info">
+                                    <svg aria-hidden="true" stroke-width="2"><use href="#icon-info"></use></svg>
+                                </div>
+                                <div class="notification-content">
+                                    <p class="notification-title">Account Notice: ₱50.00 deposit received for Checking Account (•••• 4821).</p>
+                                    <p class="notification-meta">Nov 17, 2026 • 12:56 PM</p>
+                                </div>
+                                <div class="status-indicator unread-dot"></div>
+                            </div>
+
+                            <!-- Item 3: Opens Balance & Limits Modal -->
+                            <div class="notification-item" data-action="balance">
+                                <div class="notification-icon transfer">
+                                    <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-wallet"></use></svg>
+                                </div>
+                                <div class="notification-content">
+                                    <p class="notification-title">Withdrawal Limit Update: Remaining daily withdrawal limit for Checking Account: ₱49,900.00.</p>
+                                    <p class="notification-meta">Nov 17, 2026 • 1:47 PM</p>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="notification-footer">
                             <a href="#" class="view-all" id="notifViewAll">View all notifications</a>
