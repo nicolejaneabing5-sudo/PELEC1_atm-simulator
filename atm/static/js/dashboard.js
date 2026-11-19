@@ -100,7 +100,7 @@ function addNotification(row) {
 
     item.innerHTML = `
         <div class="notification-icon ${isIn ? 'info' : 'success'}">
-            <svg aria-hidden="true" stroke-width="2"><use href="${isIn ? '#icon-info' : '#icon-bell'}"></use></svg>
+            <svg aria-hidden="true" stroke-width="2"><use href="${isIn ? '#icon-arrow-down-left' : '#icon-arrow-up-right'}"></use></svg>
         </div>
         <div class="notification-content">
             <p class="notification-title">${title}</p>
@@ -108,7 +108,7 @@ function addNotification(row) {
         </div>
         <div class="status-indicator unread-dot"></div>
     `;
-
+    
     notifList.insertAdjacentElement('afterbegin', item);
     updateNotifCount();
 }
@@ -211,8 +211,24 @@ function renderPanel() {
     document.querySelector('.new-tx h2').textContent = card.dataset.name;
     document.querySelector('.chip').textContent = `•••• ${card.dataset.last4}`;
     submitLabel.textContent = selectedType() === 'deposit' ? 'Deposit funds' : 'Withdraw funds';
+
+    const limitsHeading = $('limits-heading');
+    if (limitsHeading && card.dataset.maxTx && card.dataset.dailyMax) {
+        limitsHeading.textContent =
+            `Withdrawal limits: ${card.dataset.maxTx} per transaction • ${card.dataset.dailyMax} daily`;
+    }
+
     $('limits-today').textContent = card.dataset.limits;
-    $('overdraft-note').hidden = card.dataset.overdraft !== 'true';
+
+    const note = $('overdraft-note');
+    if (note) {
+        if (card.dataset.minBalance) {
+            note.hidden = false;
+            note.textContent = `A minimum balance of ${card.dataset.minBalance} must remain after every withdrawal.`;
+        } else {
+            note.hidden = true;
+        }
+    }
 }
 
 document.querySelectorAll('input[name="account"], input[name="tx-type"]').forEach(radio =>
@@ -365,6 +381,10 @@ txForm.addEventListener('submit', async e => {
     } finally {
         submitBtn.disabled = false;
     }
+});
+
+document.querySelectorAll('[data-meter][data-meter-width]').forEach(el => {
+    el.style.width = `${el.dataset.meterWidth}%`;
 });
 
 renderPanel();

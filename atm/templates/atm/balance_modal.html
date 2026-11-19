@@ -11,8 +11,8 @@
 
         <p class="eyebrow eyebrow--amber">Balance inquiry</p>
         <h2 id="balance-title">Total available balance</h2>
-        <p class="balance-total" id="balance-total">₱0.00</p>
-        <p class="balance-sub" id="balance-sub">Across 2 active accounts</p>
+        <p class="balance-total" id="balance-total">{{ total }}</p>
+        <p class="balance-sub" id="balance-sub">Across {{ accounts|length }} active accounts</p>
     </header>
 
     <div class="balance-body">
@@ -23,10 +23,10 @@
                 </svg>
             </span>
             <span class="balance-name">
-                <strong>Checking Account</strong>
-                <small>•••• 4821</small>
+                <strong>{{ accounts.checking.name }}</strong>
+                <small>•••• {{ accounts.checking.last4 }}</small>
             </span>
-            <strong class="balance-amount" id="balance-checking">₱0.00</strong>
+            <strong class="balance-amount" id="balance-checking">{{ accounts.checking.balance }}</strong>
         </div>
 
         <div class="balance-row">
@@ -36,10 +36,10 @@
                 </svg>
             </span>
             <span class="balance-name">
-                <strong>Savings Account</strong>
-                <small>•••• 9017</small>
+                <strong>{{ accounts.savings.name }}</strong>
+                <small>•••• {{ accounts.savings.last4 }}</small>
             </span>
-            <strong class="balance-amount" id="balance-savings">₱0.00</strong>
+            <strong class="balance-amount" id="balance-savings">{{ accounts.savings.balance }}</strong>
         </div>
 
         <p class="balance-note">

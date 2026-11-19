@@ -1,30 +1,17 @@
-from decimal import Decimal, InvalidOperation
-
-from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from django.template import loader
+from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from .oop.domain import ATMError
 from .oop import sample_accounts as bank
+from .oop.domain import ATMError
 
-CORRECT_PIN = "1234"
+CORRECT_PIN = bank.PIN
 MAX_ATTEMPTS = 4
 RECENT_COUNT = 5
-USER_NAME = "Nicole Jane Abing"
+USER_NAME = bank.USER_NAME
 
-
-LOW_BALANCE = Decimal("1000.00")   # warn when balance is at or below this
-
-
-def low_balance_alert(acc):
-    if acc.balance <= LOW_BALANCE:
-        return (
-            f"Low Balance Warning: {acc.account_type} (•••• {acc.account_number}) "
-            f"is down to {peso(acc.balance)}. Consider making a deposit."
-        )
-    return None
 
 def peso(value):
     return f"₱{value:,.2f}"
@@ -33,10 +20,13 @@ def peso(value):
 def account_state(acc):
     """Everything the page shows for one account, already formatted as text."""
     remaining = acc.daily_max - acc.withdrawn_today
+    min_balance = getattr(acc, "min_remain_balance", None)
     return {
         "name": acc.account_type,
         "last4": acc.account_number,
-        "overdraft": hasattr(acc, "overdraft_protection"),
+        "max_transaction": peso(acc.max_transaction),
+        "daily_max": peso(acc.daily_max),
+        "min_remain_balance": peso(min_balance) if min_balance is not None else None,
         "balance": peso(acc.balance),
         "withdrawn": peso(acc.withdrawn_today),
         "meter": float(acc.withdrawn_today / acc.daily_max * 100),
@@ -56,10 +46,10 @@ def history_label():
 # ---------- PIN page ----------
 def pin_state(request):
     return {
+        "pin": bank.PIN,
         "attempts_left": request.session.get("attempts_left", MAX_ATTEMPTS),
         "locked": request.session.get("pin_locked", False),
     }
-
 
 def pin_entry(request):
     return render(request, "atm/pin_entry.html", pin_state(request))
@@ -70,7 +60,8 @@ def verify_pin(request):
     state = pin_state(request)
     if state["locked"]:
         return JsonResponse(
-            {"ok": False, "locked": True, "attempts_left": 0, "message": "PIN locked."}, status=403
+            {"ok": False, "locked": True, "attempts_left": 0, "message": "PIN locked."},
+            status=403,
         )
 
     if request.POST.get("pin") == CORRECT_PIN:
@@ -104,18 +95,25 @@ def dashboard(request):
     if not request.session.get("authenticated"):
         return redirect("atm:pin_entry")
 
-    parts = USER_NAME.split()
-    return render(request, "atm/dashboard.html", {
-        "user_name": USER_NAME,
-        "first_name": parts[0],
-        "initials": parts[0][0] + parts[-1][0],
-        "accounts": {key: account_state(acc) for key, acc in bank.accounts.items()},
-        "total": total_balance(),
-        "recent": bank.history[:RECENT_COUNT],
-        "recent_max": RECENT_COUNT,
-        "history": bank.history,
-        "history_count": history_label(),
-    })
+    user_name = bank.USER_NAME
+    parts = user_name.split()
+    initials = (parts[0][0] + parts[-1][0]).upper() if len(parts) >= 2 else parts[0][:2].upper()
+
+    return render(
+        request,
+        "atm/dashboard.html",
+        {
+            "user_name": user_name,
+            "first_name": parts[0],
+            "initials": initials,
+            "accounts": {key: account_state(acc) for key, acc in bank.accounts.items()},
+            "total": total_balance(),
+            "recent": bank.history[:RECENT_COUNT],
+            "recent_max": RECENT_COUNT,
+            "history": bank.history,
+            "history_count": history_label(),
+        },
+    )
 
 
 @require_POST
@@ -125,55 +123,33 @@ def transact(request):
     if acc is None or kind not in ("deposit", "withdrawal"):
         return JsonResponse({"ok": False, "message": "Invalid request."}, status=400)
 
-    amount = request.POST.get("amount")
-
-    # Insufficient funds check: runs BEFORE the account's own rules
-    # (minimum balance, daily limit, etc.) so this message wins when the
-    # amount is simply bigger than the balance.
-    if kind == "withdrawal":
-        try:
-            requested = Decimal(str(amount))
-        except (InvalidOperation, TypeError):
-            requested = None  # let acc.withdraw() report the invalid amount
-
-        if requested is not None and requested > Decimal(str(acc.balance)):
-            return JsonResponse(
-                {
-                    "ok": False,
-                    "message": "Insufficient funds. The amount is higher than your available balance.",
-                },
-                status=400,
-            )
-
     try:
+        amount = request.POST.get("amount")
         tx = acc.deposit(amount) if kind == "deposit" else acc.withdraw(amount)
     except ATMError as error:
         return JsonResponse({"ok": False, "message": str(error)}, status=400)
 
     is_in = kind == "deposit"
-    row = {
-        "title": "Cash deposit" if is_in else "ATM withdrawal",
-        "date": tx.timestamp.strftime("%b %d, %Y"),
-        "ref": f"ABC-{tx.reference_number}",
-        "account": acc.account_type,
-        "short": acc.account_type.split()[0],
-        "last4": acc.account_number,
-        "kind": "in" if is_in else "out",
-        "type": "Deposit" if is_in else "Withdrawal",
-        "signed": ("+" if is_in else "-") + peso(tx.amount),
-        "after": peso(acc.balance),
-    }
-    bank.history.insert(0, row)
+    row = bank.record_transaction(
+        acc_key=key,
+        title="Cash deposit" if is_in else "ATM withdrawal",
+        date_str=tx.timestamp.strftime("%b %d, %Y"),
+        tx_type=kind,
+        amount=tx.amount,
+        reference=f"ABC-{tx.reference_number}",
+    )
+    bank.save_data()
 
-    return JsonResponse({
-        "ok": True,
-        "message": f"{'Deposited' if is_in else 'Withdrew'} {peso(tx.amount)} successfully.",
-        "alert": low_balance_alert(acc), 
-        "accounts": {k: account_state(a) for k, a in bank.accounts.items()},
-        "total": total_balance(),
-        "rows": {
-            "recent": loader.render_to_string("atm/tx_row.html", {"row": row, "full": False}),
-            "history": loader.render_to_string("atm/tx_row.html", {"row": row, "full": True}),
-        },
-        "history_count": history_label(),
-    })
+    return JsonResponse(
+        {
+            "ok": True,
+            "message": f"{'Deposited' if is_in else 'Withdrew'} {peso(tx.amount)} successfully.",
+            "accounts": {k: account_state(a) for k, a in bank.accounts.items()},
+            "total": total_balance(),
+            "rows": {
+                "recent": render_to_string("atm/tx_row.html", {"row": row, "full": False}),
+                "history": render_to_string("atm/tx_row.html", {"row": row, "full": True}),
+            },
+            "history_count": history_label(),
+        }
+    )

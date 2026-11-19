@@ -27,71 +27,18 @@
                 <div class="header-notification-container">
                     <button type="button" class="bell-btn" id="notificationBell" aria-label="Notifications" aria-expanded="false">
                         <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-bell"></use></svg>
-                        <span class="notification-badge" id="notifBadge">2</span>
+                        <span class="notification-badge" id="notifBadge" style="display: none;">0</span>
                     </button>
 
                     <div class="notification-backdrop" id="notifBackdrop"></div>
 
                     <div class="notification-dropdown" id="notificationDropdown" role="dialog" aria-label="Notifications" aria-hidden="true">
                         <div class="notification-header">
-                            <h3 id="notifHeaderTitle">Notifications (2)</h3>
+                            <h3 id="notifHeaderTitle">Notifications (0)</h3>
                             <button type="button" class="notification-close" id="notifClose" aria-label="Close notifications">&times;</button>
                         </div>
 
-                        <div class="notification-list" id="notificationList">
-                            <!-- Item 1: Opens Receipt Modal -->
-                            <div class="notification-item unread"
-                                data-action="receipt"
-                                data-kind="out"
-                                data-signed="-₱100.00"
-                                data-type="Withdrawal"
-                                data-account="Checking Account •••• 4821"
-                                data-title="ATM Cash Withdrawal"
-                                data-date="Nov 17, 2026 • 1:47 PM"
-                                data-ref="TXN-20261117-01"
-                                data-after="₱11,120.50">
-                                <div class="notification-icon success">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
-                                </div>
-                                <div class="notification-content">
-                                    <p class="notification-title">Transaction Alert: Withdrawal of ₱100.00 from Checking Account (•••• 4821) was successful.</p>
-                                    <p class="notification-meta">Nov 17, 2026 • 1:47 PM</p>
-                                </div>
-                                <div class="status-indicator unread-dot"></div>
-                            </div>
-
-                            <!-- Item 2: Opens Receipt Modal -->
-                            <div class="notification-item unread"
-                                data-action="receipt"
-                                data-kind="in"
-                                data-signed="+₱50.00"
-                                data-type="Deposit"
-                                data-account="Checking Account •••• 4821"
-                                data-title="Cash deposit"
-                                data-date="Nov 17, 2026 • 12:56 PM"
-                                data-ref="TXN-20261117-02"
-                                data-after="₱11,220.50">
-                                <div class="notification-icon info">
-                                    <svg aria-hidden="true" stroke-width="2"><use href="#icon-info"></use></svg>
-                                </div>
-                                <div class="notification-content">
-                                    <p class="notification-title">Account Notice: ₱50.00 deposit received for Checking Account (•••• 4821).</p>
-                                    <p class="notification-meta">Nov 17, 2026 • 12:56 PM</p>
-                                </div>
-                                <div class="status-indicator unread-dot"></div>
-                            </div>
-
-                            <!-- Item 3: Opens Balance & Limits Modal -->
-                            <div class="notification-item" data-action="balance">
-                                <div class="notification-icon transfer">
-                                    <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-wallet"></use></svg>
-                                </div>
-                                <div class="notification-content">
-                                    <p class="notification-title">Withdrawal Limit Update: Remaining daily withdrawal limit for Checking Account: ₱49,900.00.</p>
-                                    <p class="notification-meta">Nov 17, 2026 • 1:47 PM</p>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="notification-list" id="notificationList"></div>
 
                         <div class="notification-footer">
                             <a href="#" class="view-all" id="notifViewAll">View all notifications</a>
@@ -101,10 +48,10 @@
                 </div>
                 <!-- END NOTIFICATION COMPONENT -->
 
-                <a href="{% url 'atm:pin_entry' %}" class="user-menu" data-lock-session data-last4="4821" data-expiry="09/29" data-name="Nicole Jane Abing">
-                    <span class="avatar" aria-hidden="true">NJ</span>
+                <a href="{% url 'atm:pin_entry' %}" class="user-menu" data-lock-session data-last4="{{ accounts.checking.last4 }}" data-expiry="09/29" data-name="{{ user_name }}">
+                    <span class="avatar" aria-hidden="true">{{ initials }}</span>
                     <span class="user-info">
-                        <strong>Nicole Jane Abing</strong>
+                        <strong>{{ user_name }}</strong>
                         <small>Lock session</small>
                     </span>
                     <svg aria-hidden="true" stroke-width="2"><use href="#icon-chevron-down"></use></svg>
@@ -125,7 +72,7 @@
             <div class="total">
                 <small>Total balance</small>
                 <p>
-                    <strong id="total-balance">₱21,100.72</strong>
+                    <strong id="total-balance">{{ total }}</strong>
                     <a href="#" class="round-link" id="balance-link" role="button" aria-haspopup="dialog" aria-label="View balance details">
                         <svg aria-hidden="true" stroke-width="2"><use href="#icon-chevron-right"></use></svg>
                     </a>
@@ -136,8 +83,14 @@
         <fieldset class="accounts">
             <legend class="visually-hidden">Choose an account</legend>
 
-            <!-- CHANGED: data-limits now says ₱100.00 withdrawn / ₱49,900.00 remaining -->
-            <label class="account-card" data-name="Checking Account" data-last4="4821" data-limits="Withdrawn today: ₱100.00 • ₱49,900.00 remaining" data-overdraft="true">
+            <label class="account-card"
+                   data-name="{{ accounts.checking.name }}"
+                   data-last4="{{ accounts.checking.last4 }}"
+                   data-limits="{{ accounts.checking.limits }}"
+                   data-overdraft="{{ accounts.checking.overdraft|yesno:'true,false' }}"
+                   data-max-tx="{{ accounts.checking.max_transaction }}"
+                   data-daily-max="{{ accounts.checking.daily_max }}"
+                   data-overdraft-limit="{{ accounts.checking.overdraft_protection }}">
                 <input type="radio" name="account" value="checking" class="visually-hidden" checked>
                 <span class="radio-mark" aria-hidden="true"></span>
 
@@ -146,25 +99,29 @@
                         <svg stroke-width="1.5"><use href="#icon-bank"></use></svg>
                     </span>
                     <span>
-                        <strong>Checking Account</strong>
-                        <small>•••• 4821</small>
+                        <strong>{{ accounts.checking.name }}</strong>
+                        <small>•••• {{ accounts.checking.last4 }}</small>
                     </span>
                 </span>
 
                 <span class="balance-label">Available balance</span>
-                <span class="balance" data-balance="checking">₱8,240.50</span>
+                <span class="balance" data-balance="checking">{{ accounts.checking.balance }}</span>
 
                 <span class="limit">
                     <span>Withdrawn today</span>
-                    <!-- CHANGED: ₱0.00 -> ₱100.00 -->
-                    <span><b data-withdrawn="checking">₱100.00</b> / ₱50,000</span>
+                    <span><b data-withdrawn="checking">{{ accounts.checking.withdrawn }}</b> / {{ accounts.checking.daily_max }}</span>
                 </span>
-                <!-- CHANGED: width 0% -> 0.2% -->
-                <span class="meter"><span data-meter="checking" style="width: 0.2%"></span></span>
+                <span class="meter"><span data-meter="checking" data-meter-width="{{ accounts.checking.meter }}"></span></span>
             </label>
 
-            <!-- CHANGED: data-overdraft is now "true" so the minimum-balance note shows for savings too -->
-            <label class="account-card" data-name="Savings Account" data-last4="9017" data-limits="Withdrawn today: ₱0.00 • ₱50,000.00 remaining" data-overdraft="true">
+            <label class="account-card"
+                   data-name="{{ accounts.savings.name }}"
+                   data-last4="{{ accounts.savings.last4 }}"
+                   data-limits="{{ accounts.savings.limits }}"
+                   data-overdraft="{{ accounts.savings.overdraft|yesno:'true,false' }}"
+                   data-max-tx="{{ accounts.savings.max_transaction }}"
+                   data-daily-max="{{ accounts.savings.daily_max }}"
+                   data-min-balance="{{ accounts.savings.min_remain_balance }}">
                 <input type="radio" name="account" value="savings" class="visually-hidden">
                 <span class="radio-mark" aria-hidden="true"></span>
 
@@ -173,19 +130,19 @@
                          <svg stroke-width="1.5"><use href="#icon-wallet"></use></svg>
                     </span>
                     <span>
-                        <strong>Savings Account</strong>
-                        <small>•••• 9017</small>
+                        <strong>{{ accounts.savings.name }}</strong>
+                        <small>•••• {{ accounts.savings.last4 }}</small>
                     </span>
                 </span>
 
                 <span class="balance-label">Available balance</span>
-                <span class="balance" data-balance="savings">₱12,860.22</span>
+                <span class="balance" data-balance="savings">{{ accounts.savings.balance }}</span>
 
                 <span class="limit">
                     <span>Withdrawn today</span>
-                    <span><b data-withdrawn="savings">₱0.00</b> / ₱50,000</span>
+                    <span><b data-withdrawn="savings">{{ accounts.savings.withdrawn }}</b> / {{ accounts.savings.daily_max }}</span>
                 </span>
-                <span class="meter"><span data-meter="savings" style="width: 0%"></span></span>
+                <span class="meter"><span data-meter="savings" data-meter-width="{{ accounts.savings.meter }}"></span></span>
             </label>
         </fieldset>
 
@@ -200,7 +157,7 @@
                     <a href="#" class="view-all" id="view-all-link" role="button" aria-haspopup="dialog">View all ›</a>
                 </header>
 
-                <ul class="tx-list" id="tx-list" data-max="5">
+                <ul class="tx-list" id="tx-list" data-max="{{ recent_max }}">
                     {% for row in recent %}
                         {% include 'atm/tx_row.html' with row=row full=False %}
                     {% endfor %}
@@ -212,12 +169,12 @@
                 <div class="new-tx-head">
                     <div>
                         <p class="eyebrow eyebrow--light">New transaction</p>
-                        <h2 id="new-tx-title">Checking Account</h2>
+                        <h2 id="new-tx-title">{{ accounts.checking.name }}</h2>
                     </div>
-                    <span class="chip">•••• 4821</span>
+                    <span class="chip">•••• {{ accounts.checking.last4 }}</span>
                 </div>
 
-                                     <div class="segmented" role="radiogroup" aria-label="Transaction type">
+                <div class="segmented" role="radiogroup" aria-label="Transaction type">
                     <label>
                         <input type="radio" name="tx-type" value="deposit" class="visually-hidden" checked>
                         <span>Deposit</span>
@@ -228,11 +185,11 @@
                     </label>
                 </div>
 
-                
                 <form id="tx-form" action="{% url 'atm:transact' %}" method="POST" novalidate>
-                <label for="amount" class="field-label">Amount</label>
+                    {% csrf_token %}
+                    <label for="amount" class="field-label">Amount</label>
 
-                <div class="amount-field">
+                    <div class="amount-field">
                         <span class="currency-sign" aria-hidden="true">₱</span>
                         <input type="text" id="amount" name="amount" inputmode="decimal" placeholder="0.00" autocomplete="off">
                         <span class="currency-code">PHP</span>
@@ -255,11 +212,9 @@
                 <div class="limits-note">
                      <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-info"></use></svg>
                     <div>
-                        <p><strong>Withdrawal limits: ₱25,000 per transaction • ₱50,000 daily</strong></p>
-                        <!-- CHANGED: ₱100.00 withdrawn / ₱49,900.00 remaining -->
-                        <p id="limits-today">Withdrawn today: ₱100.00 • ₱49,900.00 remaining</p>
-                        <!-- CHANGED: the two stray <label> lines were removed, and this line was restored with the new text -->
-                        <p id="overdraft-note">A minimum balance of ₱500 must remain after every withdrawal.</p>
+                        <p><strong id="limits-heading">Withdrawal limits: {{ accounts.checking.max_transaction }} per transaction • {{ accounts.checking.daily_max }} daily</strong></p>
+                        <p id="limits-today">{{ accounts.checking.limits }}</p>
+                        <p id="overdraft-note">Checking includes up to {{ accounts.checking.overdraft_protection }} of overdraft protection.</p>
                     </div>
                 </div>
             </section>
@@ -272,12 +227,12 @@
     {% include 'atm/receipt_modal.html' %}
     {% include 'atm/footer.html' %}
     <dialog id="notifications-modal" class="notif-modal" aria-labelledby="notifModalTitle">
-    <div class="notif-modal-head">
-        <h2 id="notifModalTitle">All notifications</h2>
-        <button type="button" class="notification-close" id="notifModalClose" aria-label="Close">&times;</button>
-    </div>
-    <div class="notif-modal-list" id="allNotificationsList"></div>
-</dialog>
+        <div class="notif-modal-head">
+            <h2 id="notifModalTitle">All notifications</h2>
+            <button type="button" class="notification-close" id="notifModalClose" aria-label="Close">&times;</button>
+        </div>
+        <div class="notif-modal-list" id="allNotificationsList"></div>
+    </dialog>
     <script src="{% static 'js/legal.js' %}" defer></script>
     <script src="{% static 'js/dashboard.js' %}" defer></script>
     <script src="{% static 'js/card_insert.js' %}" defer></script>
