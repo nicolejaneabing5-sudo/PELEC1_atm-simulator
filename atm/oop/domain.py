@@ -1,5 +1,6 @@
-from datetime import datetime  # to import built-in date and time
-import random  # to import random numbers for reference number
+from datetime import datetime  
+import random  
+import uuid  
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
 
@@ -8,6 +9,9 @@ def money(value):
         Decimal('0.01'),
         rounding=ROUND_HALF_UP
     )
+
+def peso(value):
+    return f'₱{money(value):,.2f}'
 
 
 class ATMError(Exception):
@@ -18,18 +22,16 @@ class ATMError(Exception):
 class Transaction:
     def __init__(self, timestamp, type, amount, reference_number):
         self.timestamp = timestamp or datetime.now()
-        self.type = type  # stores the transaction type (Deposit or Withdrawal)
+        self.type = type  
         self.amount = money(amount)
-        self.reference_number = reference_number or str(
-            random.randint(100000, 999999)
-        )
+        self.reference_number = reference_number or uuid.uuid4().hex[:8].upper()
 
 
 class Account:
     def __init__(self, account_number, balance, account_type):
         self.account_number = account_number
         self._balance = money(balance)
-        self.account_type = account_type  # stores the account type
+        self.account_type = account_type  
         if self._balance < 0:
             raise ATMError('Initial balance cannot be negative.')
 
@@ -45,11 +47,9 @@ class Account:
     def withdrawn_today(self):
         return self._daily_withdraw
 
-    # Check account balance
     def check_balance(self):
         return self._balance
 
-    # Validate amount
     def validate_amount(self, amount):
         try:
             amt = money(amount)
@@ -63,11 +63,9 @@ class Account:
 
         return amt
 
-    # Deposit validation
     def deposit(self, amount):
         amt = self.validate_amount(amount)
 
-        # Balance update happens safely after validation passes
         new_balance = self._balance + amt
         self._balance = money(new_balance)
 
@@ -78,7 +76,6 @@ class Account:
 
         return transaction
 
-    # Withdraw validation
     def withdraw(self, amount):
         raise NotImplementedError(
             'Subclasses must implement withdraw().'
@@ -105,26 +102,23 @@ class SavingsAccount(Account):
     def withdraw(self, amount):
         amt = self.validate_amount(amount)
 
-        # Check per-transaction limit (10 000)
         if amt > self.max_transaction:
             raise ATMError(
                 f'Transaction limit exceeded. Maximum withdrawal '
-                f'per transaction is ₱{self.max_transaction}.'
+                f'per transaction is {peso(self.max_transaction)}.'  
             )
 
-        # Check cumulative daily maximum limit (50 000)
         if self._daily_withdraw + amt > self.daily_max:
             remaining = self.daily_max - self._daily_withdraw
             raise ATMError(
                 f'Daily withdrawal limit exceeded. '
-                f'Remaining daily limit is ₱{remaining}.'
+                f'Remaining daily limit is {peso(remaining)}.'  
             )
 
-        # Check minimum remaining balance rule (500)
         if self.balance - amt < self.min_remain_balance:
             raise ATMError(
                 f'Savings account must maintain a minimum balance '
-                f'of ₱{self.min_remain_balance}.'
+                f'of {peso(self.min_remain_balance)}.'  
             )
 
         new_balance = self._balance - amt
@@ -152,7 +146,7 @@ class CheckingAccount(Account):
         balance,
         max_transaction=Decimal('25000.00'),
         daily_max=Decimal('50000.00'),
-        overdraft_protection=Decimal('500.00')
+        min_remain_balance=Decimal('500.00') 
     ):
         super().__init__(
             account_number, balance, 'Checking Account'
@@ -160,39 +154,31 @@ class CheckingAccount(Account):
 
         self.max_transaction = money(max_transaction)
         self.daily_max = money(daily_max)
-        self.overdraft_protection = money(overdraft_protection)
+        self.min_remain_balance = money(min_remain_balance)  
 
     def withdraw(self, amount):
         amt = self.validate_amount(amount)
 
-        # Check per-transaction limit (25 000)
         if amt > self.max_transaction:
             raise ATMError(
                 f'Transaction limit exceeded. Maximum withdrawal '
-                f'per transaction is ₱{self.max_transaction}.'
+                f'per transaction is {peso(self.max_transaction)}.'
             )
 
-        # Check cumulative daily maximum limit (50 000)
         if self._daily_withdraw + amt > self.daily_max:
             remaining = self.daily_max - self._daily_withdraw
             raise ATMError(
                 f'Daily withdrawal limit exceeded. '
-                f'Remaining daily limit is ₱{remaining}.'
+                f'Remaining daily limit is {peso(remaining)}.'
             )
 
-        # Check overdraft protection limit
-        max_allowed = self.balance + self.overdraft_protection
-
-        if amt > max_allowed:
-            raise ATMError('Overdraft limit exceeded.')
+        if self.balance - amt < self.min_remain_balance:
+            raise ATMError(
+                f'Checking account must maintain a minimum balance '
+                f'of {peso(self.min_remain_balance)}.'
+            )
 
         new_balance = self._balance - amt
-
-        if new_balance < -self.overdraft_protection:
-            raise ATMError(
-                'Operation results in an invalid balance '
-                'exceeding overdraft protection.'
-            )
 
         self._balance = money(new_balance)
         self._daily_withdraw += amt
@@ -203,3 +189,5 @@ class CheckingAccount(Account):
         self.transaction_history.append(transaction)
 
         return transaction
+
+    

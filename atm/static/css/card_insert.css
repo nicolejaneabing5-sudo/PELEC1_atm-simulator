@@ -1,0 +1,149 @@
+/* Uses your design tokens: --navy, --red, --gold, --text, --muted (with fallbacks) */
+.abc-ci {
+    --ci-navy: var(--navy, #141f3b);
+    --ci-red: var(--red, #ec1c24);
+    --ci-gold: var(--gold, #fba52f);
+    --ci-text: var(--text, #4b5470);
+    --ci-muted: var(--muted, #8a93a8);
+    --ci-ok: #1fb36b;
+    display: flex;
+    flex-direction: column;
+    font-family: inherit;
+    color: var(--ci-navy);
+}
+
+/* ---------- header (matches .card-header / .lock-icon) ---------- */
+.abc-ci__header { display: flex; justify-content: space-between; align-items: flex-start; }
+.abc-ci__eyebrow { margin: 0; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.2em; color: var(--ci-red); }
+.abc-ci__title { margin: 0.35rem 0 0; font-size: 1.6rem; line-height: 1.2; }
+.abc-ci__icon {
+    display: grid; place-items: center; flex: none;
+    width: 48px; height: 48px; border-radius: 14px;
+    background: var(--ci-navy); color: #fff;
+}
+.abc-ci__icon svg { width: 20px; height: 20px; }
+.abc-ci__desc { margin: 1rem 0 1.5rem; font-size: 0.95rem; line-height: 1.6; color: var(--ci-text); }
+
+/* ---------- reader ---------- */
+.abc-ci__reader { margin: auto 0; }   /* centers the reader between header and button */
+
+.abc-ci__slot {
+    position: relative; z-index: 2; height: 26px; padding: 10px 10px 0;
+    border-radius: 9px 9px 4px 4px;
+    background: linear-gradient(#07090d, #2a2e36);
+    box-shadow: inset 0 3px 6px #000, 0 6px 14px -8px rgba(20, 31, 59, 0.5);
+}
+.abc-ci__slot i { display: block; height: 3px; border-radius: 3px; background: #000; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12); }
+.abc-ci__slot::after {
+    content: ""; position: absolute; left: 10px; right: 10px; bottom: 5px; height: 2px; border-radius: 2px; opacity: 0;
+    background: linear-gradient(90deg, transparent, var(--ci-gold), transparent);
+}
+.abc-ci__slot.is-scan::after { animation: abcCiScan 0.9s ease-in-out infinite alternate; }
+@keyframes abcCiScan { from { opacity: 0.1; transform: scaleX(0.3); } to { opacity: 1; transform: scaleX(1); } }
+
+.abc-ci__led {
+    position: absolute; right: 12px; top: -12px; width: 40px; height: 5px; border-radius: 5px;
+    background: var(--ci-gold); box-shadow: 0 0 10px var(--ci-gold);
+    animation: abcCiPulse 1.4s ease-in-out infinite; transition: background 0.3s, box-shadow 0.3s;
+}
+.abc-ci__led.is-busy { animation-duration: 0.35s; }
+.abc-ci__led.is-ok { background: var(--ci-ok); box-shadow: 0 0 12px var(--ci-ok); animation: none; }
+@keyframes abcCiPulse { 50% { opacity: 0.35; } }
+
+.abc-ci__bay { position: relative; z-index: 1; margin-top: -2px; padding: 22px 0; clip-path: inset(0 -40px -40px -40px); }
+.abc-ci__float { perspective: 1100px; animation: abcCiFloat 3.6s ease-in-out infinite; }
+.abc-ci.is-started .abc-ci__float { animation: none; }
+@keyframes abcCiFloat { 50% { transform: translateY(-7px); } }
+
+/* ---------- the card ---------- */
+.abc-ci__card {
+    --rx: 4deg; --ry: -16deg; --mx: 28%; --my: 8%;
+    position: relative; overflow: hidden; width: min(100%, 340px); margin: 0 auto;
+    aspect-ratio: 1.586; container-type: inline-size;
+    border-radius: 16px; color: #fff; cursor: grab; touch-action: none; user-select: none;
+    background:
+        radial-gradient(120% 90% at var(--mx) var(--my), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 55%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 3px),
+        linear-gradient(150deg, #262a31 0%, #0c0d10 55%, #1b1d22 100%);
+    box-shadow: 0 28px 38px -16px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: rotateY(var(--ry)) rotateX(var(--rx)) rotateZ(-2deg);
+    transition: transform 0.18s ease-out;
+}
+.abc-ci__card:active { cursor: grabbing; }
+.abc-ci__card.is-straight { --rx: 0deg; --ry: 0deg; transform: none; transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.3, 1); }
+.abc-ci__card.is-inserting { transform: translateY(calc(-100% - 50px)); transition: transform 1.3s cubic-bezier(0.6, 0.02, 0.3, 1); }
+.abc-ci__edge { position: absolute; left: 0; right: 0; bottom: 0; height: 1.6cqw; background: linear-gradient(90deg, var(--ci-red), var(--ci-gold)); opacity: 0.9; }
+
+.abc-ci__brand { position: absolute; left: 8cqw; top: 8cqw; font-size: 6.2cqw; font-weight: 600; letter-spacing: 0.42em; white-space: nowrap; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6), 0 0 1px rgba(255, 255, 255, 0.4); }
+
+.abc-ci__chip {
+    position: absolute; left: 8cqw; top: 20cqw; width: 14cqw; height: 10.6cqw; border-radius: 2cqw; overflow: hidden;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    background: linear-gradient(135deg, #f4f5f7, #aeb3ba 50%, #e6e8eb);
+    box-shadow: inset 0 0 0 0.4cqw rgba(60, 64, 72, 0.55);
+}
+.abc-ci__chip i { border-right: 0.4cqw solid rgba(60, 64, 72, 0.4); }
+.abc-ci__chip i:last-child { border: 0; }
+.abc-ci__chip::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 0.4cqw; background: rgba(60, 64, 72, 0.4); }
+.abc-ci__chip.is-reading { animation: abcCiChip 0.45s ease-in-out infinite alternate; }
+@keyframes abcCiChip { to { box-shadow: inset 0 0 0 0.4cqw rgba(60, 64, 72, 0.55), 0 0 16px 4px rgba(255, 255, 255, 0.8); } }
+
+.abc-ci__num {
+    position: absolute; left: 8cqw; top: 36cqw; white-space: nowrap;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 6cqw; font-weight: 600; letter-spacing: 0.06em;
+    text-shadow: 0 1px 0 #000, 0 -1px 0 rgba(255, 255, 255, 0.18);
+}
+.abc-ci__last4 { position: absolute; left: 8cqw; top: 46.8cqw; font: 700 3cqw ui-monospace, Menlo, Consolas, monospace; opacity: 0.85; }
+.abc-ci__valid { position: absolute; left: 22cqw; top: 45.4cqw; display: flex; align-items: center; gap: 2.4cqw; }
+.abc-ci__valid small { font-size: 1.9cqw; line-height: 1.15; font-weight: 700; letter-spacing: 0.06em; opacity: 0.8; }
+.abc-ci__valid span { font: 4.2cqw ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.06em; }
+.abc-ci__name { position: absolute; left: 8cqw; bottom: 7.5cqw; font-size: 4.4cqw; font-weight: 500; letter-spacing: 0.14em; white-space: nowrap; text-shadow: 0 1px 0 #000; }
+
+.abc-ci__logo { position: absolute; right: 8cqw; bottom: 9.5cqw; display: flex; align-items: center; }
+.abc-ci__dot { width: 9cqw; height: 9cqw; border-radius: 50%; }
+.abc-ci__dot--r { background: #f0222a; }
+.abc-ci__dot--o { background: var(--ci-gold); margin-left: -3.6cqw; opacity: 0.95; mix-blend-mode: screen; }
+.abc-ci__logo em { position: absolute; right: 0; bottom: -3.8cqw; font-style: normal; font-size: 2.6cqw; font-weight: 800; letter-spacing: 0.1em; opacity: 0.85; }
+
+/* ---------- button + note ---------- */
+.abc-ci__btn {
+    display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+    width: 100%; height: 54px; border: 0; border-radius: 14px; cursor: pointer;
+    background: var(--ci-navy); color: #fff; font: inherit; font-size: 1rem; font-weight: 700;
+    box-shadow: 0 10px 22px -12px rgba(20, 31, 59, 0.75);
+    transition: transform 0.15s, opacity 0.3s;
+}
+.abc-ci__btn svg { color: var(--ci-gold); }
+.abc-ci__btn:hover { transform: translateY(-1px); }
+.abc-ci__btn:focus-visible { outline: 3px solid var(--ci-gold); outline-offset: 3px; }
+.abc-ci__btn:disabled { cursor: default; opacity: 0.6; transform: none; }
+.abc-ci__note { margin: 1.25rem 0 0; text-align: center; font-size: 0.7rem; line-height: 1.8; color: var(--ci-muted); min-height: 1.8em; }
+
+/* ---------- transitions ---------- */
+.abc-ci.is-leaving { opacity: 0; transition: opacity 0.35s ease; }
+.abc-ci-in { animation: abcCiIn 0.45s ease both; }
+@keyframes abcCiIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .abc-ci__float, .abc-ci__led, .abc-ci__chip.is-reading, .abc-ci__slot.is-scan::after, .abc-ci-in { animation: none; }
+}
+
+/* straight, still card: swiping is handled by JS */
+.abc-ci__float { animation: none; }
+.abc-ci__card { transform: none; transition: none; cursor: grab; touch-action: none; }
+.abc-ci__card:active { cursor: grabbing; }
+
+/* ---------- eject overlay (Lock session) ---------- */
+.abc-eject {
+  position: fixed; inset: 0; z-index: 9999;
+  display: grid; place-items: center; padding: 1rem;
+  background: rgba(20, 31, 59, 0.55);
+  backdrop-filter: blur(6px);
+  animation: abcCiIn 0.3s ease both;
+}
+.abc-eject__panel {
+  width: min(100%, 460px); padding: 2.25rem; border-radius: 28px;
+  background: #fff; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
+}
+.abc-eject .abc-ci__card { cursor: default; }

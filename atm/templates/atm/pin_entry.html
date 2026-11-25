@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/footer_style.css' %}">
     <link rel="stylesheet" href="{% static 'css/pin_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/card_insert.css' %}">
 </head>
 <body class="pin-entry">
      {% include 'atm/icons.html' %}
@@ -47,6 +48,8 @@
 
        <form class="login-card" id="pin-form" method="post" action="{% url 'atm:verify_pin' %}" data-attempts="{{ attempts_left }}" data-locked="{{ locked|yesno:'true,false' }}" aria-labelledby="pin-title" novalidate>
         {% csrf_token %}
+
+        <div id="pinPanel">
             <header class="card-header">
                 <div>
                     <p class="eyebrow">Welcome back</p>
@@ -70,7 +73,7 @@
                 </div>
 
                 <input type="password" id="pin-input" class="pin-input" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="4-digit PIN">
-                
+
                 <span class="pin-count" id="pin-count">0/4</span>
             </div>
 
@@ -111,11 +114,15 @@
             <p class="disclaimer">
                 This is a secure educational simulation.<br>Never share your real banking PIN.
             </p>
+        </div><!-- /#pinPanel -->
+
+        {% include 'atm/card_insert.html' with pin_target="#pinPanel" %}
         </form>
     </main>
 
     {% include 'atm/footer.html' %}
     <script src="{% static 'js/legal.js' %}" defer></script>
-    <script src="{% static 'js/pin.js' %}" defer></script> 
+    <script src="{% static 'js/pin.js' %}" defer></script>
+    <script src="{% static 'js/card_insert.js' %}" defer></script>
 </body>
 </html>

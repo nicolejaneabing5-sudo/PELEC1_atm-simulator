@@ -1,9 +1,9 @@
 from decimal import Decimal
 from atm.oop.domain import CheckingAccount, SavingsAccount
 
-# instantiate accounts
-checking_account = CheckingAccount("4821", 8240.50)
-savings_account = SavingsAccount("9017", 12860.22)
+
+checking_account = CheckingAccount("4821", 5410.50)
+savings_account = SavingsAccount("9017", 12110.22)
 
 accounts = {
     "checking": checking_account,
@@ -77,12 +77,18 @@ def get_payload():
             "checking": {
                 "account_number": checking_account.account_number,
                 "balance": float(checking_account.check_balance()),
-                "type": checking_account.account_type
+                "type": checking_account.account_type,
+                # CHANGED: added these two lines
+                "withdrawn_today": float(checking_account.withdrawn_today),
+                "remaining_daily": float(checking_account.daily_max - checking_account.withdrawn_today)
             },
             "savings": {
                 "account_number": savings_account.account_number,
                 "balance": float(savings_account.check_balance()),
-                "type": savings_account.account_type
+                "type": savings_account.account_type,
+                # CHANGED: added these two lines
+                "withdrawn_today": float(savings_account.withdrawn_today),
+                "remaining_daily": float(savings_account.daily_max - savings_account.withdrawn_today)
             }
         },
         "transactions": transactions
