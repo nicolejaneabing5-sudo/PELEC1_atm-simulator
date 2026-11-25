@@ -69,6 +69,23 @@ class Account:
             raise ATMError('Amount must be greater than zero.')
 
         return amt
+    
+    # Validate withdrawal amount
+    def validate_withdrawal_amount(self, amount):
+        amt = self.validate_amount(amount)
+
+        if amt < Decimal('100.00'):
+            raise ATMError(
+                'Minimum withdrawal amount is ₱100.00.'
+            )
+
+        if amt % Decimal('100.00') != Decimal('0.00'):
+            raise ATMError(
+                'Invalid withdrawal amount. ATM only dispenses '
+                '₱100, ₱500, and ₱1,000 bills.'
+            )
+
+        return amt
 
     # Deposit validation
     def deposit(self, amount):
@@ -113,7 +130,7 @@ class SavingsAccount(Account):
         self.min_remain_balance = money(min_remain_balance)
 
     def withdraw(self, amount):
-        amt = self.validate_amount(amount)
+        amt = self.validate_withdrawal_amount(amount)
 
         # Check per-transaction limit (10 000)
         if amt > self.max_transaction:
@@ -173,7 +190,7 @@ class CheckingAccount(Account):
         self.min_remain_balance = money(min_remain_balance)  # CHANGED
 
     def withdraw(self, amount):
-        amt = self.validate_amount(amount)
+        amt = self.validate_withdrawal_amount(amount)
 
         # Check per-transaction limit (25 000)
         if amt > self.max_transaction:

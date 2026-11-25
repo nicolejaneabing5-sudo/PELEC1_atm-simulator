@@ -103,3 +103,35 @@ class TestCheckingAccountRules(SimpleTestCase):
             account.withdraw(Decimal("25000.00"))
         with self.assertRaises(ATMError):
             account.withdraw(Decimal("1000.00"))
+            
+class TestWithdrawalValidation(SimpleTestCase):
+
+    def setUp(self):
+        self.savings = SavingsAccount("9017", Decimal("20000.00"))
+        self.checking = CheckingAccount("4821", Decimal("20000.00"))
+
+    def test_valid_withdrawal_amounts(self):
+        for amount in ["100", "200", "500", "600", "1000"]:
+            account = SavingsAccount("9017", Decimal("20000.00"))
+            initial_balance = account.check_balance()
+
+            account.withdraw(Decimal(amount))
+
+            self.assertEqual(
+                account.check_balance(),
+                initial_balance - Decimal(amount)
+            )
+
+    def test_invalid_withdrawal_amounts(self):
+        for amount in ["50", "250", "1050"]:
+            account = SavingsAccount("9017", Decimal("20000.00"))
+            with self.assertRaises(ATMError):
+                account.withdraw(Decimal(amount))
+
+    def test_checking_invalid_withdrawal(self):
+        with self.assertRaises(ATMError):
+            self.checking.withdraw(Decimal("1050"))
+
+    def test_minimum_withdrawal(self):
+        with self.assertRaises(ATMError):
+            self.savings.withdraw(Decimal("50"))
