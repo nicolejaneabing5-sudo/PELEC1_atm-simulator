@@ -23,9 +23,20 @@ class TestAccountBase(unittest.TestCase):
 
     def test_valid_deposit(self):
         self.account.deposit(Decimal("1000.00"))
-        
         self.assertEqual(self.account.check_balance(), Decimal('6000.00'))
-
+        
+    def test_minimum_deposit_rule(self):
+        initial_balance = self.account.check_balance()
+        
+        for low_amount in [Decimal("1.50"), Decimal("499.99")]:
+            with self.assertRaises(ATMError):
+                self.account.deposit(low_amount)
+                
+        self.assertEqual(self.account.check_balance(), initial_balance)
+        
+        self.account.deposit(Decimal("500.00"))
+        self.assertEqual(self.account.check_balance(), Decimal("5500.00"))
+        
     def test_valid_withdrawal(self):
         self.account.withdraw(Decimal("500.00"))
         self.assertEqual(self.account.check_balance(), Decimal('4500.00'))
@@ -85,24 +96,28 @@ class TestCheckingAccountRules(unittest.TestCase):
     def test_checking_per_transaction_limit(self):
         with self.assertRaises(ATMError):
             self.account.withdraw(Decimal("30000.00"))
-
-    def test_checking_overdraft_protection(self):
-        account = CheckingAccount("4821", Decimal("100.00"))
+            
+    def test_checking_minimum_remaining_balance(self):
+        account = CheckingAccount("4821", Decimal("1000.00"))
+        with self.assertRaises(ATMError):
+            account.withdraw(Decimal("600.00"))
+        self.assertEqual(account.check_balance(), Decimal('1000.00'))
+        
         account.withdraw(Decimal("500.00"))
-        self.assertEqual(account.check_balance(), Decimal('-400.00'))
-
-    def test_checking_overdraft_exceeded(self):
+        self.assertEqual(account.check_balance(), Decimal('500.00'))
+        
+    def test_checking_withdraw_below_min_balance_rejected(self):
         account = CheckingAccount("4821", Decimal("100.00"))
         with self.assertRaises(ATMError):
-            account.withdraw(Decimal("700.00"))
+            account.withdraw(Decimal("500.00"))
         self.assertEqual(account.check_balance(), Decimal('100.00'))
-
+        
     def test_checking_daily_limit(self):
-        account = CheckingAccount("4821", Decimal("100000.00"))
-        for _ in range(2):
-            account.withdraw(Decimal("25000.00"))
-        with self.assertRaises(ATMError):
-            account.withdraw(Decimal("1000.00"))
+            account = CheckingAccount("4821", Decimal("100000.00"))
+            for _ in range(2):
+                account.withdraw(Decimal("25000.00"))
+            with self.assertRaises(ATMError):
+                account.withdraw(Decimal("1000.00"))
 
 
 if __name__ == "__main__":

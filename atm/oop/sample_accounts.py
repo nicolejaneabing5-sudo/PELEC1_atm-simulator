@@ -3,7 +3,7 @@ from atm.oop.domain import CheckingAccount, SavingsAccount
 
 # CHANGED: starting balances are lower, so that AFTER the seed transactions below,
 # checking = ₱8,240.50 and savings = ₱12,860.22 (matches your dashboard)
-checking_account = CheckingAccount("4821", 5410.50)
+checking_account = CheckingAccount("4821", 5390.50)
 savings_account = SavingsAccount("9017", 12110.22)
 
 accounts = {
@@ -38,7 +38,7 @@ def _log(acc, tx, title, kind):
 _log(checking_account, checking_account.deposit(2450.00), "Payroll deposit", "in")
 _log(checking_account, checking_account.withdraw(100.00), "ATM withdrawal", "out")
 _log(savings_account, savings_account.deposit(750.00), "Monthly savings", "in")
-_log(checking_account, checking_account.deposit(480.00), "Cash deposit", "in")
+_log(checking_account, checking_account.deposit(500.00), "Cash deposit", "in")
 
 transactions = [
     {
@@ -66,7 +66,7 @@ transactions = [
         "type": "Deposit",
         "title": "Cash deposit",
         "account": "Checking Account",
-        "amount": 480.00,
+        "amount": 500.00,
         "date": "Apr 18, 2025"
     }
 ]

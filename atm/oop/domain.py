@@ -31,6 +31,8 @@ class Transaction:
 
 
 class Account:
+    min_deposit = Decimal('500.00')
+    
     def __init__(self, account_number, balance, account_type):
         self.account_number = account_number
         self._balance = money(balance)
@@ -71,6 +73,9 @@ class Account:
     # Deposit validation
     def deposit(self, amount):
         amt = self.validate_amount(amount)
+        
+        if amt < money(self.min_deposit):
+            raise ATMError(f'Minimum deposit amount is {peso(self.min_deposit)}.')
 
         # Balance update happens safely after validation passes
         new_balance = self._balance + amt
