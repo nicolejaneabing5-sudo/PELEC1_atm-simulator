@@ -1,9 +1,10 @@
 from decimal import Decimal
 from atm.oop.domain import CheckingAccount, SavingsAccount
 
-# instantiate accounts
-checking_account = CheckingAccount("4821", 8240.50)
-savings_account = SavingsAccount("9017", 12860.22)
+# CHANGED: starting balances are lower, so that AFTER the seed transactions below,
+# checking = ₱8,240.50 and savings = ₱12,860.22 (matches your dashboard)
+checking_account = CheckingAccount("4821", 5390.50)
+savings_account = SavingsAccount("9017", 12110.22)
 
 accounts = {
     "checking": checking_account,
@@ -37,7 +38,7 @@ def _log(acc, tx, title, kind):
 _log(checking_account, checking_account.deposit(2450.00), "Payroll deposit", "in")
 _log(checking_account, checking_account.withdraw(100.00), "ATM withdrawal", "out")
 _log(savings_account, savings_account.deposit(750.00), "Monthly savings", "in")
-_log(checking_account, checking_account.deposit(480.00), "Cash deposit", "in")
+_log(checking_account, checking_account.deposit(500.00), "Cash deposit", "in")
 
 transactions = [
     {
@@ -65,7 +66,7 @@ transactions = [
         "type": "Deposit",
         "title": "Cash deposit",
         "account": "Checking Account",
-        "amount": 480.00,
+        "amount": 500.00,
         "date": "Apr 18, 2025"
     }
 ]
@@ -77,12 +78,18 @@ def get_payload():
             "checking": {
                 "account_number": checking_account.account_number,
                 "balance": float(checking_account.check_balance()),
-                "type": checking_account.account_type
+                "type": checking_account.account_type,
+                # CHANGED: added these two lines
+                "withdrawn_today": float(checking_account.withdrawn_today),
+                "remaining_daily": float(checking_account.daily_max - checking_account.withdrawn_today)
             },
             "savings": {
                 "account_number": savings_account.account_number,
                 "balance": float(savings_account.check_balance()),
-                "type": savings_account.account_type
+                "type": savings_account.account_type,
+                # CHANGED: added these two lines
+                "withdrawn_today": float(savings_account.withdrawn_today),
+                "remaining_daily": float(savings_account.daily_max - savings_account.withdrawn_today)
             }
         },
         "transactions": transactions
