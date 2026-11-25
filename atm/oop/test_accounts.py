@@ -1,4 +1,5 @@
 import unittest
+from datetime import date, timedelta
 from decimal import Decimal
 from atm.oop.domain import Account, SavingsAccount, CheckingAccount, ATMError, money
 
@@ -6,7 +7,6 @@ from atm.oop.domain import Account, SavingsAccount, CheckingAccount, ATMError, m
 class TestAccountBase(unittest.TestCase):
 
     def setUp(self):
-        # create a concrete subclass of Account for testing base methods
         class ConcreteAccount(Account):
             def withdraw(self, amount):
                 amt = self.validate_amount(amount)
@@ -23,7 +23,6 @@ class TestAccountBase(unittest.TestCase):
 
     def test_valid_deposit(self):
         self.account.deposit(Decimal("1000.00"))
-        
         self.assertEqual(self.account.check_balance(), Decimal('6000.00'))
 
     def test_valid_withdrawal(self):
@@ -41,6 +40,11 @@ class TestAccountBase(unittest.TestCase):
             self.account.withdraw(Decimal("0.00"))
         with self.assertRaises(ATMError):
             self.account.withdraw(Decimal("-100.00"))
+
+    def test_nan_and_infinity_rejected(self):
+        for bad in ("NaN", "Infinity", "abc", ""):
+            with self.assertRaises(ATMError):
+                self.account.validate_amount(bad)
 
     def test_balance_unchanged_after_failed_withdrawal(self):
         initial_balance = self.account.check_balance()
@@ -62,19 +66,26 @@ class TestSavingsAccountRules(unittest.TestCase):
         account = SavingsAccount("9017", Decimal("1260.00"))
         with self.assertRaises(ATMError):
             account.withdraw(Decimal("1000.00"))
+        self.assertEqual(account.check_balance(), Decimal("1260.00"))
 
     def test_savings_valid_withdrawal(self):
         self.account.withdraw(Decimal("5000.00"))
-        
         self.assertEqual(self.account.check_balance(), Decimal('15000.00'))
 
     def test_savings_daily_limit(self):
         account = SavingsAccount("9017", Decimal("100000.00"))
         for _ in range(5):
             account.withdraw(Decimal("10000.00"))
-            
         with self.assertRaises(ATMError):
             account.withdraw(Decimal("10000.00"))
+
+    def test_savings_daily_limit_resets_next_day(self):
+        account = SavingsAccount("9017", Decimal("100000.00"))
+        for _ in range(5):
+            account.withdraw(Decimal("10000.00"))
+        account._daily_date = date.today() - timedelta(days=1)  # pretend it's tomorrow
+        self.assertEqual(account.withdrawn_today, Decimal("0.00"))
+        account.withdraw(Decimal("10000.00"))  # allowed again
 
 
 class TestCheckingAccountRules(unittest.TestCase):
@@ -86,16 +97,16 @@ class TestCheckingAccountRules(unittest.TestCase):
         with self.assertRaises(ATMError):
             self.account.withdraw(Decimal("30000.00"))
 
-    def test_checking_overdraft_protection(self):
-        account = CheckingAccount("4821", Decimal("100.00"))
-        account.withdraw(Decimal("500.00"))
-        self.assertEqual(account.check_balance(), Decimal('-400.00'))
-
-    def test_checking_overdraft_exceeded(self):
-        account = CheckingAccount("4821", Decimal("100.00"))
+    def test_checking_minimum_balance_rule(self):
+        account = CheckingAccount("4821", Decimal("1260.00"))
         with self.assertRaises(ATMError):
-            account.withdraw(Decimal("700.00"))
-        self.assertEqual(account.check_balance(), Decimal('100.00'))
+            account.withdraw(Decimal("1000.00"))
+        self.assertEqual(account.check_balance(), Decimal("1260.00"))
+
+    def test_checking_can_withdraw_down_to_minimum(self):
+        account = CheckingAccount("4821", Decimal("1000.00"))
+        account.withdraw(Decimal("500.00"))
+        self.assertEqual(account.check_balance(), Decimal("500.00"))
 
     def test_checking_daily_limit(self):
         account = CheckingAccount("4821", Decimal("100000.00"))

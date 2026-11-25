@@ -12,86 +12,34 @@
     <link rel="stylesheet" href="{% static 'css/dashboard_style.css' %}">
     <link rel="stylesheet" href="{% static 'css/popup_style.css' %}">
     <link rel="stylesheet" href="{% static 'css/card_insert.css' %}">
-</head>
+    <link rel="stylesheet" href="{% static 'css/menu_style.css' %}">
 
+    </head>
 <body class="dashboard">
-     {% include 'atm/icons.html' %}
-<header class="site-header">
+    {% include 'atm/icons.html' %}
+    <header class="site-header">
         <div class="container header-inner">
             <a href="{% url 'atm:dashboard' %}" class="logo">
                 <img src="{% static 'images/bank_logo.png' %}" alt="ABC Bank Logo">
             </a>
 
             <div class="header-actions">
-                <!-- START NOTIFICATION COMPONENT -->
+                <!-- START NOTIFICATION COMPONENT (starts empty; dashboard.js fills it) -->
                 <div class="header-notification-container">
                     <button type="button" class="bell-btn" id="notificationBell" aria-label="Notifications" aria-expanded="false">
                         <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-bell"></use></svg>
-                        <span class="notification-badge" id="notifBadge">2</span>
+                        <span class="notification-badge" id="notifBadge" style="display: none;">0</span>
                     </button>
 
                     <div class="notification-backdrop" id="notifBackdrop"></div>
 
                     <div class="notification-dropdown" id="notificationDropdown" role="dialog" aria-label="Notifications" aria-hidden="true">
                         <div class="notification-header">
-                            <h3 id="notifHeaderTitle">Notifications (2)</h3>
+                            <h3 id="notifHeaderTitle">Notifications (0)</h3>
                             <button type="button" class="notification-close" id="notifClose" aria-label="Close notifications">&times;</button>
                         </div>
 
-                        <div class="notification-list" id="notificationList">
-                            <!-- Item 1: Opens Receipt Modal -->
-                            <div class="notification-item unread"
-                                data-action="receipt"
-                                data-kind="out"
-                                data-signed="-₱100.00"
-                                data-type="Withdrawal"
-                                data-account="Checking Account •••• 4821"
-                                data-title="ATM Cash Withdrawal"
-                                data-date="Nov 17, 2026 • 1:47 PM"
-                                data-ref="TXN-20261117-01"
-                                data-after="₱11,120.50">
-                                <div class="notification-icon success">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
-                                </div>
-                                <div class="notification-content">
-                                    <p class="notification-title">Transaction Alert: Withdrawal of ₱100.00 from Checking Account (•••• 4821) was successful.</p>
-                                    <p class="notification-meta">Nov 17, 2026 • 1:47 PM</p>
-                                </div>
-                                <div class="status-indicator unread-dot"></div>
-                            </div>
-
-                            <!-- Item 2: Opens Receipt Modal -->
-                            <div class="notification-item unread"
-                                data-action="receipt"
-                                data-kind="in"
-                                data-signed="+₱50.00"
-                                data-type="Deposit"
-                                data-account="Checking Account •••• 4821"
-                                data-title="Cash deposit"
-                                data-date="Nov 17, 2026 • 12:56 PM"
-                                data-ref="TXN-20261117-02"
-                                data-after="₱11,220.50">
-                                <div class="notification-icon info">
-                                    <svg aria-hidden="true" stroke-width="2"><use href="#icon-info"></use></svg>
-                                </div>
-                                <div class="notification-content">
-                                    <p class="notification-title">Account Notice: ₱50.00 deposit received for Checking Account (•••• 4821).</p>
-                                    <p class="notification-meta">Nov 17, 2026 • 12:56 PM</p>
-                                </div>
-                                <div class="status-indicator unread-dot"></div>
-                            </div>
-
-                            <!-- Item 3: Opens Balance & Limits Modal -->
-                            <div class="notification-item" data-action="balance">
-                                <div class="notification-icon transfer">
-                                    <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-wallet"></use></svg>
-                                </div>
-                                <div class="notification-content">
-                                    <p class="notification-title">Withdrawal Limit Update: Remaining daily withdrawal limit for Checking Account: ₱49,900.00.</p>
-                                    <p class="notification-meta">Nov 17, 2026 • 1:47 PM</p>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="notification-list" id="notificationList"></div>
 
                         <div class="notification-footer">
                             <a href="#" class="view-all" id="notifViewAll">View all notifications</a>
@@ -101,10 +49,20 @@
                 </div>
                 <!-- END NOTIFICATION COMPONENT -->
 
-                <a href="{% url 'atm:pin_entry' %}" class="user-menu" data-lock-session data-last4="4821" data-expiry="09/29" data-name="Nicole Jane Abing">
-                    <span class="avatar" aria-hidden="true">NJ</span>
+
+<!-- START MENU COMPONENT -->
+<div class="menu-wrapper">
+    <button type="button" class="menu-btn" id="menuBtn" aria-label="Open menu" aria-haspopup="true" aria-expanded="false">
+        <span></span><span></span><span></span>
+    </button>
+</div>
+<!-- END MENU COMPONENT -->
+
+
+                <a href="{% url 'atm:lock_session' %}" class="user-menu" data-lock-session data-last4="4821" data-expiry="09/29" data-name="{{ user_name }}">
+                    <span class="avatar" aria-hidden="true">{{ initials }}</span>
                     <span class="user-info">
-                        <strong>Nicole Jane Abing</strong>
+                        <strong>{{ user_name }}</strong>
                         <small>Lock session</small>
                     </span>
                     <svg aria-hidden="true" stroke-width="2"><use href="#icon-chevron-down"></use></svg>
@@ -125,7 +83,7 @@
             <div class="total">
                 <small>Total balance</small>
                 <p>
-                    <strong id="total-balance">₱21,100.72</strong>
+                    <strong id="total-balance">{{ total }}</strong>
                     <a href="#" class="round-link" id="balance-link" role="button" aria-haspopup="dialog" aria-label="View balance details">
                         <svg aria-hidden="true" stroke-width="2"><use href="#icon-chevron-right"></use></svg>
                     </a>
@@ -133,11 +91,11 @@
             </div>
         </section>
 
+              {% with c=accounts.checking s=accounts.savings %}
         <fieldset class="accounts">
             <legend class="visually-hidden">Choose an account</legend>
 
-            <!-- CHANGED: data-limits now says ₱100.00 withdrawn / ₱49,900.00 remaining -->
-            <label class="account-card" data-name="Checking Account" data-last4="4821" data-limits="Withdrawn today: ₱100.00 • ₱49,900.00 remaining" data-overdraft="true">
+            <label class="account-card" data-name="{{ c.name }}" data-last4="{{ c.last4 }}" data-limits="{{ c.limits }}" data-max-tx="{{ c.max_tx }}" data-daily-max="{{ c.daily_max }}" data-overdraft="true">
                 <input type="radio" name="account" value="checking" class="visually-hidden" checked>
                 <span class="radio-mark" aria-hidden="true"></span>
 
@@ -146,49 +104,47 @@
                         <svg stroke-width="1.5"><use href="#icon-bank"></use></svg>
                     </span>
                     <span>
-                        <strong>Checking Account</strong>
-                        <small>•••• 4821</small>
+                        <strong>{{ c.name }}</strong>
+                        <small>•••• {{ c.last4 }}</small>
                     </span>
                 </span>
 
                 <span class="balance-label">Available balance</span>
-                <span class="balance" data-balance="checking">₱8,240.50</span>
+                <span class="balance" data-balance="checking">{{ c.balance }}</span>
 
                 <span class="limit">
                     <span>Withdrawn today</span>
-                    <!-- CHANGED: ₱0.00 -> ₱100.00 -->
-                    <span><b data-withdrawn="checking">₱100.00</b> / ₱50,000</span>
+                    <span><b data-withdrawn="checking">{{ c.withdrawn }}</b> / ₱50,000</span>
                 </span>
-                <!-- CHANGED: width 0% -> 0.2% -->
-                <span class="meter"><span data-meter="checking" style="width: 0.2%"></span></span>
+                <span class="meter"><span data-meter="checking" style="width: {{ c.meter_css }}%"></span></span>
             </label>
 
-            <!-- CHANGED: data-overdraft is now "true" so the minimum-balance note shows for savings too -->
-            <label class="account-card" data-name="Savings Account" data-last4="9017" data-limits="Withdrawn today: ₱0.00 • ₱50,000.00 remaining" data-overdraft="true">
+            <label class="account-card" data-name="{{ s.name }}" data-last4="{{ s.last4 }}" data-limits="{{ s.limits }}" data-max-tx="{{ s.max_tx }}" data-daily-max="{{ s.daily_max }}" data-overdraft="true">
                 <input type="radio" name="account" value="savings" class="visually-hidden">
                 <span class="radio-mark" aria-hidden="true"></span>
 
                 <span class="account-head">
                     <span class="icon-tile icon-tile--amber" aria-hidden="true">
-                         <svg stroke-width="1.5"><use href="#icon-wallet"></use></svg>
+                        <svg stroke-width="1.5"><use href="#icon-wallet"></use></svg>
                     </span>
                     <span>
-                        <strong>Savings Account</strong>
-                        <small>•••• 9017</small>
+                        <strong>{{ s.name }}</strong>
+                        <small>•••• {{ s.last4 }}</small>
                     </span>
                 </span>
 
                 <span class="balance-label">Available balance</span>
-                <span class="balance" data-balance="savings">₱12,860.22</span>
+                <span class="balance" data-balance="savings">{{ s.balance }}</span>
 
                 <span class="limit">
                     <span>Withdrawn today</span>
-                    <span><b data-withdrawn="savings">₱0.00</b> / ₱50,000</span>
+                    <span><b data-withdrawn="savings">{{ s.withdrawn }}</b> / ₱50,000</span>
                 </span>
-                <span class="meter"><span data-meter="savings" style="width: 0%"></span></span>
+                <span class="meter"><span data-meter="savings" style="width: {{ s.meter_css }}%"></span></span>
             </label>
         </fieldset>
-
+        {% endwith %}
+        
         <div class="dashboard-grid">
 
             <section class="panel transactions" aria-labelledby="tx-title">
@@ -200,24 +156,23 @@
                     <a href="#" class="view-all" id="view-all-link" role="button" aria-haspopup="dialog">View all ›</a>
                 </header>
 
-                <ul class="tx-list" id="tx-list" data-max="5">
+                <ul class="tx-list" id="tx-list" data-max="{{ recent_max }}">
                     {% for row in recent %}
                         {% include 'atm/tx_row.html' with row=row full=False %}
                     {% endfor %}
                 </ul>
-
             </section>
 
             <section class="new-tx" aria-labelledby="new-tx-title">
                 <div class="new-tx-head">
                     <div>
                         <p class="eyebrow eyebrow--light">New transaction</p>
-                        <h2 id="new-tx-title">Checking Account</h2>
+                        <h2 id="new-tx-title">{{ accounts.checking.name }}</h2>
                     </div>
-                    <span class="chip">•••• 4821</span>
+                    <span class="chip">•••• {{ accounts.checking.last4 }}</span>
                 </div>
 
-                                     <div class="segmented" role="radiogroup" aria-label="Transaction type">
+                <div class="segmented" role="radiogroup" aria-label="Transaction type">
                     <label>
                         <input type="radio" name="tx-type" value="deposit" class="visually-hidden" checked>
                         <span>Deposit</span>
@@ -228,37 +183,36 @@
                     </label>
                 </div>
 
-                
                 <form id="tx-form" action="{% url 'atm:transact' %}" method="POST" novalidate>
-                <label for="amount" class="field-label">Amount</label>
+                    {% csrf_token %}
+                    <label for="amount" class="field-label">Amount</label>
 
-                <div class="amount-field">
+                    <div class="amount-field">
                         <span class="currency-sign" aria-hidden="true">₱</span>
-                        <input type="text" id="amount" name="amount" inputmode="decimal" placeholder="0.00" autocomplete="off">
+                        <input type="text" id="amount" name="amount" inputmode="numeric" placeholder="0" autocomplete="off">
                         <span class="currency-code">PHP</span>
                     </div>
 
                     <p class="tx-message" id="tx-message" role="alert" hidden></p>
-                    
-                    <div class="quick-amounts" role="group" aria-label="Quick amounts">
-                        <button type="button" data-amount="50">₱50</button>
-                        <button type="button" data-amount="100">₱100</button>
-                        <button type="button" data-amount="200">₱200</button>
-                    </div>
+
+                   <div class="quick-amounts" role="group" aria-label="Quick amounts">
+                    <button type="button" data-amount="500">₱500</button>
+                     <button type="button" data-amount="1000">₱1,000</button>
+                        <button type="button" data-amount="1500">₱1,500</button>
+                        </div>
+
 
                     <button type="submit" class="btn-amber">
                         <span id="tx-submit-label">Deposit funds</span>
-                         <svg aria-hidden="true" stroke-width="2"><use href="#icon-chevron-right"></use></svg>
+                        <svg aria-hidden="true" stroke-width="2"><use href="#icon-chevron-right"></use></svg>
                     </button>
                 </form>
 
-                <div class="limits-note">
-                     <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-info"></use></svg>
+                 <div class="limits-note">
+                    <svg aria-hidden="true" stroke-width="1.5"><use href="#icon-info"></use></svg>
                     <div>
-                        <p><strong>Withdrawal limits: ₱25,000 per transaction • ₱50,000 daily</strong></p>
-                        <!-- CHANGED: ₱100.00 withdrawn / ₱49,900.00 remaining -->
-                        <p id="limits-today">Withdrawn today: ₱100.00 • ₱49,900.00 remaining</p>
-                        <!-- CHANGED: the two stray <label> lines were removed, and this line was restored with the new text -->
+                        <p><strong id="limits-rule">Withdrawal limits: {{ accounts.checking.max_tx }} per transaction • {{ accounts.checking.daily_max }} daily</strong></p>
+                        <p id="limits-today">{{ accounts.checking.limits }}</p>
                         <p id="overdraft-note">A minimum balance of ₱500 must remain after every withdrawal.</p>
                     </div>
                 </div>
@@ -271,16 +225,92 @@
     {% include 'atm/history_modal.html' %}
     {% include 'atm/receipt_modal.html' %}
     {% include 'atm/footer.html' %}
+
     <dialog id="notifications-modal" class="notif-modal" aria-labelledby="notifModalTitle">
-    <div class="notif-modal-head">
-        <h2 id="notifModalTitle">All notifications</h2>
-        <button type="button" class="notification-close" id="notifModalClose" aria-label="Close">&times;</button>
+        <div class="notif-modal-head">
+            <h2 id="notifModalTitle">All notifications</h2>
+            <button type="button" class="notification-close" id="notifModalClose" aria-label="Close">&times;</button>
+        </div>
+        <div class="notif-modal-list" id="allNotificationsList"></div>
+    </dialog>
+
+        <dialog id="accountDialog" class="menu-dialog" data-url="{% url 'atm:account_info' %}" aria-labelledby="accountTitle">
+        <div class="menu-dialog-head">
+            <h2 id="accountTitle">Account information</h2>
+            <button type="button" class="menu-dialog-close" data-close aria-label="Close">&times;</button>
+        </div>
+        <div class="menu-dialog-body" id="accountBody">Loading…</div>
+    </dialog>
+
+    <dialog id="limitDialog" class="menu-dialog" data-url="{% url 'atm:limits' %}" aria-labelledby="limitTitle">
+        <div class="menu-dialog-head">
+            <h2 id="limitTitle">Withdrawal limits</h2>
+            <button type="button" class="menu-dialog-close" data-close aria-label="Close">&times;</button>
+        </div>
+        <div class="menu-dialog-body" id="limitBody">Loading…</div>
+    </dialog>
+
+    <dialog id="pinDialog" class="menu-dialog" aria-labelledby="pinTitle">
+        <div class="menu-dialog-head">
+            <h2 id="pinTitle">Change PIN</h2>
+            <button type="button" class="menu-dialog-close" data-close aria-label="Close">&times;</button>
+        </div>
+        <form id="pinForm" class="menu-dialog-body" action="{% url 'atm:change_pin' %}" method="POST" novalidate>
+            {% csrf_token %}
+            <label for="curPin">Current PIN</label>
+            <input type="password" id="curPin" name="current" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="off" data-digits>
+            <label for="newPin">New PIN (4 digits)</label>
+            <input type="password" id="newPin" name="new" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="off" data-digits>
+            <label for="confPin">Confirm new PIN</label>
+            <input type="password" id="confPin" name="confirm" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="off" data-digits>
+            <p id="pinMsg" class="pin-msg" role="alert" hidden></p>
+            <div class="menu-actions">
+                <button type="button" class="menu-btn-secondary" data-close>Cancel</button>
+                <button type="submit" class="menu-btn-primary">Save PIN</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="helpDialog" class="menu-dialog" aria-labelledby="helpTitle">
+        <div class="menu-dialog-head">
+            <h2 id="helpTitle">Help / FAQ</h2>
+            <button type="button" class="menu-dialog-close" data-close aria-label="Close">&times;</button>
+        </div>
+        <div class="menu-dialog-body">
+            <details><summary>How do I change my PIN?</summary><p>Open the menu, choose Change PIN, enter your current PIN, then your new 4-digit PIN twice.</p></details>
+            <details><summary>What are the withdrawal limits?</summary><p>Checking allows ₱25,000 per transaction and Savings ₱10,000. Each account has a daily limit of ₱50,000. See Withdrawal limits in the menu for what you have left today.</p></details>
+            <details><summary>Why was my withdrawal declined?</summary><p>Your balance may be too low, you may have passed a transaction or daily limit, or the withdrawal would leave less than the ₱500 minimum balance.</p></details>
+            <details><summary>What happens if I enter the wrong PIN?</summary><p>After 4 wrong attempts the PIN is locked. You can reset the lock from the PIN screen.</p></details>
+            <details><summary>How do I log out?</summary><p>Choose Logout in the menu. Always log out when you walk away from the ATM.</p></details>
+            <details><summary>Will the bank ask for my PIN?</summary><p>Never. Do not share your PIN with anyone, including bank staff.</p></details>
+            <details><summary>What amounts can I deposit or withdraw?</summary><p>Whole pesos in multiples of ₱50, with no coins or cents. The minimum deposit is ₱500 and the minimum withdrawal is ₱100.</p></details>
+        </div>
+    </dialog>
+
+    <!-- MENU PANEL -->
+<div class="menu-dropdown" id="menuDropdown" role="dialog" aria-label="Menu" hidden>
+    <div class="menu-panel-head">
+        <h3>Menu</h3>
+        <button type="button" class="menu-panel-close" id="menuClose" aria-label="Close menu">&times;</button>
     </div>
-    <div class="notif-modal-list" id="allNotificationsList"></div>
-</dialog>
+
+    <div class="menu-panel-list">
+        <button type="button" data-dialog="accountDialog">Account info</button>
+        <button type="button" data-dialog="pinDialog">Change PIN</button>
+        <button type="button" data-dialog="limitDialog">Withdrawal limits</button>
+        <button type="button" data-dialog="helpDialog">Help / FAQ</button>
+    </div>
+
+    <div class="menu-panel-foot">
+        <a href="{% url 'atm:lock_session' %}" class="menu-logout" id="menuLogout">Logout</a>
+    </div>
+</div>
+<div class="menu-backdrop" id="menuBackdrop"></div>
+
     <script src="{% static 'js/legal.js' %}" defer></script>
     <script src="{% static 'js/dashboard.js' %}" defer></script>
     <script src="{% static 'js/card_insert.js' %}" defer></script>
+    <script src="{% static 'js/menu.js' %}" defer></script>
 
 </body>
 </html>

@@ -211,6 +211,7 @@ function renderPanel() {
     document.querySelector('.new-tx h2').textContent = card.dataset.name;
     document.querySelector('.chip').textContent = `•••• ${card.dataset.last4}`;
     submitLabel.textContent = selectedType() === 'deposit' ? 'Deposit funds' : 'Withdraw funds';
+    $('limits-rule').textContent = `Withdrawal limits: ${card.dataset.maxTx} per transaction • ${card.dataset.dailyMax} daily`;   // NEW
     $('limits-today').textContent = card.dataset.limits;
     $('overdraft-note').hidden = card.dataset.overdraft !== 'true';
 }

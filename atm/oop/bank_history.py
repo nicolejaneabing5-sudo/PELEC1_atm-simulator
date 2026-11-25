@@ -9,5 +9,4 @@ def _row(title, date, ref, acct, short, last4, kind, amount, after):
 
 history = [
     _row("Cash deposit", "Apr 18, 2025", "ABC-100001", "Checking Account", "Checking", "4821", "in", 480, 10000),
-    # add more seed rows as needed
 ]

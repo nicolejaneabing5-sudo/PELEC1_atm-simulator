@@ -202,6 +202,11 @@
     margin-top: 2px;
 }
 
+.notification-icon.warning {
+    background-color: #FDECEA;
+    color: #E84C3C;
+}
+
 .notification-icon svg {
     width: 16px;
     height: 16px;

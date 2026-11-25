@@ -1,9 +1,11 @@
 from decimal import Decimal
 from atm.oop.domain import CheckingAccount, SavingsAccount
 
-# CHANGED: starting balances are lower, so that AFTER the seed transactions below,
-# checking = ₱8,240.50 and savings = ₱12,860.22 (matches your dashboard)
-checking_account = CheckingAccount("4821", 5410.50)
+# After the seed transactions below:
+# checking = 5,390.50 + 2,450 - 100 + 500 = ₱8,240.50
+# savings  = 12,110.22 + 750 = ₱12,860.22
+#thesse are the values/
+checking_account = CheckingAccount("4821", 5390.50)
 savings_account = SavingsAccount("9017", 12110.22)
 
 accounts = {
@@ -12,6 +14,7 @@ accounts = {
 }
 
 history = []
+
 
 def _peso(value):
     return f"₱{value:,.2f}"
@@ -35,41 +38,22 @@ def _log(acc, tx, title, kind):
 
 
 # seed transaction history (oldest first, so the newest ends up on top)
-_log(checking_account, checking_account.deposit(2450.00), "Payroll deposit", "in")
-_log(checking_account, checking_account.withdraw(100.00), "ATM withdrawal", "out")
-_log(savings_account, savings_account.deposit(750.00), "Monthly savings", "in")
-_log(checking_account, checking_account.deposit(480.00), "Cash deposit", "in")
+_log(checking_account, checking_account.deposit(2450), "Payroll deposit", "in")
+_log(checking_account, checking_account.withdraw(100), "ATM withdrawal", "out")
+_log(savings_account, savings_account.deposit(750), "Monthly savings", "in")
+_log(checking_account, checking_account.deposit(500), "Cash deposit", "in")
 
 transactions = [
-    {
-        "type": "Deposit",
-        "title": "Payroll deposit",
-        "account": "Checking Account",
-        "amount": 2450.00,
-        "date": "Apr 24, 2025"
-    },
-    {
-        "type": "Withdrawal",
-        "title": "ATM withdrawal",
-        "account": "Checking Account",
-        "amount": -100.00,
-        "date": "Apr 22, 2025"
-    },
-    {
-        "type": "Deposit",
-        "title": "Monthly savings",
-        "account": "Savings Account",
-        "amount": 750.00,
-        "date": "Apr 21, 2025"
-    },
-    {
-        "type": "Deposit",
-        "title": "Cash deposit",
-        "account": "Checking Account",
-        "amount": 480.00,
-        "date": "Apr 18, 2025"
-    }
+    {"type": "Deposit", "title": "Payroll deposit", "account": "Checking Account",
+     "amount": 2450.00, "date": "Apr 24, 2025"},
+    {"type": "Withdrawal", "title": "ATM withdrawal", "account": "Checking Account",
+     "amount": -100.00, "date": "Apr 22, 2025"},
+    {"type": "Deposit", "title": "Monthly savings", "account": "Savings Account",
+     "amount": 750.00, "date": "Apr 21, 2025"},
+    {"type": "Deposit", "title": "Cash deposit", "account": "Checking Account",
+     "amount": 500.00, "date": "Apr 18, 2025"},
 ]
+
 
 def get_payload():
     return {
@@ -79,7 +63,6 @@ def get_payload():
                 "account_number": checking_account.account_number,
                 "balance": float(checking_account.check_balance()),
                 "type": checking_account.account_type,
-                # CHANGED: added these two lines
                 "withdrawn_today": float(checking_account.withdrawn_today),
                 "remaining_daily": float(checking_account.daily_max - checking_account.withdrawn_today)
             },
@@ -87,7 +70,6 @@ def get_payload():
                 "account_number": savings_account.account_number,
                 "balance": float(savings_account.check_balance()),
                 "type": savings_account.account_type,
-                # CHANGED: added these two lines
                 "withdrawn_today": float(savings_account.withdrawn_today),
                 "remaining_daily": float(savings_account.daily_max - savings_account.withdrawn_today)
             }
