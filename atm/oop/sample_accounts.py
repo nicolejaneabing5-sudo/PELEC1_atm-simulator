@@ -38,18 +38,18 @@ def _log(acc, tx, title, kind):
 
 
 # seed transaction history (oldest first, so the newest ends up on top)
-_log(checking_account, checking_account.deposit(2450), "Payroll deposit", "in")
+_log(checking_account, checking_account.deposit(2500), "Payroll deposit", "in")
 _log(checking_account, checking_account.withdraw(100), "ATM withdrawal", "out")
-_log(savings_account, savings_account.deposit(750), "Monthly savings", "in")
+_log(savings_account, savings_account.deposit(700), "Monthly savings", "in")
 _log(checking_account, checking_account.deposit(500), "Cash deposit", "in")
 
 transactions = [
     {"type": "Deposit", "title": "Payroll deposit", "account": "Checking Account",
-     "amount": 2450.00, "date": "Apr 24, 2025"},
+     "amount": 2500.00, "date": "Apr 24, 2025"},
     {"type": "Withdrawal", "title": "ATM withdrawal", "account": "Checking Account",
      "amount": -100.00, "date": "Apr 22, 2025"},
     {"type": "Deposit", "title": "Monthly savings", "account": "Savings Account",
-     "amount": 750.00, "date": "Apr 21, 2025"},
+     "amount": 700.00, "date": "Apr 21, 2025"},
     {"type": "Deposit", "title": "Cash deposit", "account": "Checking Account",
      "amount": 500.00, "date": "Apr 18, 2025"},
 ]

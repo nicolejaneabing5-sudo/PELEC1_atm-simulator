@@ -13,7 +13,7 @@ def money(value):
 
 MIN_DEPOSIT = Decimal('500')       # minimum deposit
 MIN_WITHDRAWAL = Decimal('100')    # minimum withdrawal
-STEP = Decimal('50')               # amounts must be multiples of this (no coins)
+STEP = Decimal('100')               # amounts must be multiples of this (no coins)
 
 
 def peso(value):
